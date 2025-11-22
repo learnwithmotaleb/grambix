@@ -1,0 +1,54 @@
+part of '../screen/home_screen.dart';
+
+class TopBarWidget extends StatelessWidget {
+  const TopBarWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SvgPicture.asset(
+            Assets.logo.appLogo,
+            height: Dimensions.heightSize * 4.5,
+          ),
+          InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onTap: () => Get.find<NavigationController>().goToProfile(),
+            child: Padding(
+              padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
+              child: Obx(
+                () => CircleAvatar(
+                  backgroundColor: Colors.grey.shade300,
+                  radius: 20,
+                  backgroundImage:
+                      Get.find<ProfileController>()
+                              .profileInfo
+                              .value
+                              ?.user
+                              .profilePicture !=
+                          null
+                      ? NetworkImage(
+                          Get.find<ProfileController>().profileInfo.value!.user.profilePicture,
+                        )
+                      : null, // Fallback if there is no profile picture
+                  child:
+                      Get.find<ProfileController>()
+                              .profileInfo
+                              .value
+                              ?.user
+                              .profilePicture ==
+                          null
+                      ? Icon(Icons.person, color: Colors.white, size: 20)
+                      : null,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
