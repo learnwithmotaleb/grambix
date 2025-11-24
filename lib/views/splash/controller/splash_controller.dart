@@ -11,7 +11,7 @@ class SplashController extends GetxController {
       if (AppStorage.isLoggedIn) {
         Get.toNamed(Routes.navigation);
       } else {
-        Get.toNamed(Routes.navigation);
+        Get.toNamed(Routes.loginScreen);
       }
     });
   }

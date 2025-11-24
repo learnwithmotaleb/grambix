@@ -1,5 +1,5 @@
 class ApiEndPoints {
-  static final mainDomain = 'http://13.62.165.184:3000';
+  static final mainDomain = 'https://server.grambix.com';
   static final baseUrl = '$mainDomain/api/';
 
   /// API End Points
