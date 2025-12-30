@@ -1,5 +1,3 @@
-
-
 import java.util.Properties
 import java.io.FileInputStream
 
@@ -29,6 +27,7 @@ android {
     }
 
     compileOptions {
+        // JDK 17 compatible with Flutter/Kotlin Gradle setup
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -45,9 +44,14 @@ android {
             storePassword = keystoreProperties["storePassword"] as String
         }
     }
+
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("debug")
+            // Remove redundant debug assignment
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
+        }
+        debug {
             signingConfig = signingConfigs.getByName("release")
         }
     }

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.grambix">
+    package="com.olav.grambix">
 
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -11,8 +11,6 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="com.android.vending.BILLING"/>
-
-    <!-- Android 13+ Media Permissions for Image/Video/Audio -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
@@ -26,15 +24,12 @@
         android:allowBackup="true"
         android:theme="@style/Theme.GramBix">
 
-        <!-- Flutter embedding v2 -->
         <meta-data android:name="flutterEmbedding" android:value="2"/>
 
-        <!-- Launcher activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
-            android:taskAffinity=""
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
@@ -50,13 +45,11 @@
             </intent-filter>
         </activity>
 
-        <!-- Optional: In-app purchase / Billing support -->
         <meta-data
             android:name="com.android.billingclient.version"
             android:value="5.1.0"/>
     </application>
 
-    <!-- Required for Flutter text processing plugin -->
     <queries>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
