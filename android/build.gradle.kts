@@ -1,18 +1,15 @@
-// Top-level build.gradle.kts
-
 buildscript {
+    val kotlinVersion by extra("1.9.0") // or compatible version
     repositories {
         google()
         mavenCentral()
     }
-
     dependencies {
-        // Android Gradle plugin
-        classpath("com.android.tools.build:gradle:8.1.1")
-        // Kotlin Gradle plugin
-        classpath(kotlin("gradle-plugin", version = "1.8.20"))
+        classpath("com.android.tools.build:gradle:8.11.1")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     }
 }
+
 
 allprojects {
     repositories {
