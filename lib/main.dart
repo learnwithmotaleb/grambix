@@ -19,6 +19,8 @@ void main() async {
   await Initial.init();
   runApp(const MyApp());
 
+  //RAKKDHF
+
 }
 
 class MyApp extends StatelessWidget {
