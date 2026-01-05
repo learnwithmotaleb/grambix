@@ -18,9 +18,7 @@ void main() async {
   Get.put(RevenueCatService());
   await Initial.init();
   runApp(const MyApp());
- //pakitan
-  //Rakib
-  //s
+
 }
 
 class MyApp extends StatelessWidget {
