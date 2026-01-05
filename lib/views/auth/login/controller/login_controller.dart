@@ -16,6 +16,10 @@ class LoginController extends GetxController {
   void onInit() {
     super.onInit();
 
+    /// Add listeners to text controllers
+    ///
+    /// //PAGLA MOTALEB
+
   }
 
   void onEmailChanged(String value) {
