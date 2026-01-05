@@ -19,6 +19,7 @@ void main() async {
   await Initial.init();
   runApp(const MyApp());
  //pakitan
+  //Rakib
 }
 
 class MyApp extends StatelessWidget {
