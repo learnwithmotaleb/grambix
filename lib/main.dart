@@ -18,7 +18,7 @@ void main() async {
   Get.put(RevenueCatService());
   await Initial.init();
   runApp(const MyApp());
-  //hello bangdddjdjd
+ //pakitan
 }
 
 class MyApp extends StatelessWidget {
