@@ -19,6 +19,9 @@ class LoginController extends GetxController {
     /// Add listeners to text controllers
     ///
     /// //PAGLA MOTALEB
+    ///
+    ///
+    /// SDAJKLFJASDLFASDFFHADJKFLJSDA;LFSDHKJLFLKSDFSDF
 
   }
 
