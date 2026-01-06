@@ -21,28 +21,9 @@ class TopBarWidget extends StatelessWidget {
               padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
               child: Obx(
                 () => CircleAvatar(
-                  backgroundColor: Colors.grey.shade300,
-                  radius: 20,
-                  backgroundImage:
-                      Get.find<ProfileController>()
-                              .profileInfo
-                              .value
-                              ?.user
-                              .profilePicture !=
-                          null
-                      ? NetworkImage(
-                          Get.find<ProfileController>().profileInfo.value!.user.profilePicture,
-                        )
-                      : null, // Fallback if there is no profile picture
-                  child:
-                      Get.find<ProfileController>()
-                              .profileInfo
-                              .value
-                              ?.user
-                              .profilePicture ==
-                          null
-                      ? Icon(Icons.person, color: Colors.white, size: 20)
-                      : null,
+                  backgroundImage: NetworkImage(
+                    '${ApiEndPoints.mainDomain}/${Get.find<ProfileController>().profileInfo.value?.user.profilePicture}',
+                  ),
                 ),
               ),
             ),

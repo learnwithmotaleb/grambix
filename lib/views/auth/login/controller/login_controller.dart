@@ -14,14 +14,9 @@ class LoginController extends GetxController {
 
   @override
   void onInit() {
+    emailController.text = 'jmmotaleb100@gmail.ocm';
+    passwordController.text = '123456789';
     super.onInit();
-
-    /// Add listeners to text controllers
-    ///
-    /// //PAGLA MOTALEB
-    ///
-    ///
-    /// SDAJKLFJASDLFASDFFHADJKFLJSDA;LFSDHKJLFLKSDFSDF
 
   }
 
