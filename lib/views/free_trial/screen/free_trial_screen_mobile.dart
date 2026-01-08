@@ -7,30 +7,32 @@ class FreeTrialScreenMobile extends GetView<FreeTrialController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CommonAppBar(title: "Subscription"),
-      bottomNavigationBar: Container(
-        margin: EdgeInsetsGeometry.symmetric(vertical: Dimensions.verticalSize),
-        padding: EdgeInsets.symmetric(
-          horizontal: Dimensions.defaultHorizontalSize,
-          vertical: Dimensions.verticalSize * 0.35,
-        ),
-        decoration: BoxDecoration(
-          color: CustomColor.whiteColor.withAlpha(33),
-          border: Border.symmetric(
-            horizontal: BorderSide(color: CustomColor.whiteColor),
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          margin: EdgeInsetsGeometry.symmetric(vertical: Dimensions.verticalSize),
+          padding: EdgeInsets.symmetric(
+            horizontal: Dimensions.defaultHorizontalSize,
+            vertical: Dimensions.verticalSize * 0.35,
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: crossStart,
-          mainAxisSize: mainMin,
-          children: [
-            TextWidget(
-              'Payment Option',
-              fontWeight: FontWeight.bold,
-              color: CustomColor.whiteColor,
+          decoration: BoxDecoration(
+            color: CustomColor.whiteColor.withAlpha(33),
+            border: Border.symmetric(
+              horizontal: BorderSide(color: CustomColor.whiteColor),
             ),
-            Space.height.v10,
-            Image.asset(Assets.icons.pay),
-          ],
+          ),
+          child: Column(
+            crossAxisAlignment: crossStart,
+            mainAxisSize: mainMin,
+            children: [
+              TextWidget(
+                'Payment Option',
+                fontWeight: FontWeight.bold,
+                color: CustomColor.whiteColor,
+              ),
+              Space.height.v10,
+              Image.asset(Assets.icons.pay),
+            ],
+          ),
         ),
       ),
       body: SafeArea(
