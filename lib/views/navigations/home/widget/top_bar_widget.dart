@@ -22,7 +22,7 @@ class TopBarWidget extends StatelessWidget {
               child: Obx(
                 () => CircleAvatar(
                   backgroundImage: NetworkImage(
-                    '${ApiEndPoints.mainDomain}/${Get.find<ProfileController>().profileInfo.value?.user.profilePicture}',
+                    '${Get.find<ProfileController>().profileInfo.value?.user.profilePicture}',
                   ),
                 ),
               ),

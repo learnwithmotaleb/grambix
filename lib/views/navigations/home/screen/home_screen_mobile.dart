@@ -27,14 +27,14 @@ class HomeScreenMobile extends GetView<HomeController> {
     );
   }
 
-  _bodyWidget() {
+  Padding _bodyWidget() {
     return Padding(
       padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
       child: CustomScrollView(
         physics: const ClampingScrollPhysics(),
 
         slivers: [
-          SliverToBoxAdapter(child: SearchBarWidget()),
+          // SliverToBoxAdapter(child: SearchBarWidget()),
           SliverToBoxAdapter(child: Space.height.v15),
           SliverToBoxAdapter(child: HomeSliderWidget()),
           SliverToBoxAdapter(child: Space.height.v15),
