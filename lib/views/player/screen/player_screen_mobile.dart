@@ -7,7 +7,7 @@ class PlayerScreenMobile extends GetView<PlayerController> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      bottomNavigationBar: BottomMusicBar(),
+      bottomNavigationBar: SafeArea(child: BottomMusicBar()),
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,

@@ -95,81 +95,10 @@ class BottomMusicBar extends GetView<PlayerController> {
                     ),
                   ),
                 ),
-                InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      backgroundColor: Colors.transparent,
-                      // transparent modal sheet background
-                      barrierColor: Colors.transparent,
-                      // no dimming overlay
-                      isScrollControlled: true,
-                      builder: (context) {
-                        return ClipRRect(
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(20),
-                          ),
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(
-                              sigmaX: 30,
-                              sigmaY: 30,
-                            ), // blur intensity
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadiusGeometry.circular(
-                                  Dimensions.radius,
-                                ),
-                                color: CustomColor.background.withOpacity(0.2),
-                              ),
-                              height: MediaQuery.of(context).size.height * 0.5,
-                              child: ListView(
-                                shrinkWrap: true,
-                                physics: ClampingScrollPhysics(),
-                                children: [
-                                  TextWidget(
-                                    padding: EdgeInsetsGeometry.symmetric(
-                                      vertical: Dimensions.verticalSize * 0.5,
-                                      horizontal:
-                                          Dimensions.defaultHorizontalSize,
-                                    ),
-                                    'Up Next',
-                                    color: CustomColor.whiteColor,
-                                  ),
-
-                                  ...List.generate(
-                                    10,
-                                    (index) => ListTile(
-                                      leading: Image.asset(Assets.logo.cardIMG),
-                                      title: TextWidget(
-                                        'Imagined By You',
-                                        color: CustomColor.whiteColor,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      subtitle: TextWidget(
-                                        'By You,',
-                                        color: CustomColor.whiteColor,
-                                        fontSize: Dimensions.titleSmall * 0.9,
-                                      ),
-                                      trailing: SvgPicture.asset(
-                                        Assets.icons.headphone,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  child: Icon(Icons.menu, color: CustomColor.secondary),
-                ),
+              SizedBox()
               ],
             ),
-            Space.height.v40,
+            Space.height.v20,
           ],
         ),
       ),
