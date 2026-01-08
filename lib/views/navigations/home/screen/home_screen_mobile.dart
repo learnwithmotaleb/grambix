@@ -30,6 +30,7 @@ class HomeScreenMobile extends GetView<HomeController> {
   Padding _bodyWidget() {
     return Padding(
       padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
+
       child: CustomScrollView(
         physics: const ClampingScrollPhysics(),
 
