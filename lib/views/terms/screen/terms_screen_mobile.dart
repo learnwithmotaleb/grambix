@@ -8,12 +8,12 @@ class TermsScreenMobile extends GetView<TermsController> {
     print(controller.terms.value);
     return Scaffold(
       appBar: CommonAppBar(title: Strings.termsAndConditions),
-      body:
-      Obx(
+      body: Obx(
             () => controller.isLoading.value
-            ?  LoadingWidget()
-            : Obx(
-              () => Html(
+            ? LoadingWidget()
+            : SingleChildScrollView(
+          padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
+          child: Html(
             data: controller.terms.value.tr,
             style: {
               "body": Style(
@@ -24,6 +24,7 @@ class TermsScreenMobile extends GetView<TermsController> {
           ),
         ),
       ),
+
     );
   }
 }

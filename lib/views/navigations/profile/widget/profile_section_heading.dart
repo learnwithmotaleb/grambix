@@ -45,7 +45,7 @@ class ProfileSectionHeading extends StatelessWidget {
               ),
             ),
             builder: (BuildContext context) {
-              return LogoutDialog();
+              return SafeArea(child: LogoutDialog());
             },
           );
         }),

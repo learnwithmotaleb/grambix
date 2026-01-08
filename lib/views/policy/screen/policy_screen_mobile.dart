@@ -8,20 +8,22 @@ class PolicyScreenMobile extends GetView<PolicyController> {
     return Scaffold(
       appBar: CommonAppBar(title: Strings.privacyPolicy),
       body: Obx(
-        () => controller.isLoading.value
+            () => controller.isLoading.value
             ? LoadingWidget()
-            : Obx(
-                () => Html(
-                  data: controller.privacyPolicy.value.tr,
-                  style: {
-                    "body": Style(
-                      fontSize: FontSize(Dimensions.titleSmall),
-                      color: CustomColor.whiteColor.withAlpha(889),
-                    ),
-                  },
-                ),
+            : SingleChildScrollView(
+          padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
+          child: Html(
+            data: controller.privacyPolicy.value.tr,
+            style: {
+              "body": Style(
+                fontSize: FontSize(Dimensions.titleSmall),
+                color: CustomColor.whiteColor.withAlpha(889),
               ),
+            },
+          ),
+        ),
       ),
+
     );
   }
 }
