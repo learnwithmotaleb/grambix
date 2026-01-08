@@ -19,15 +19,20 @@ class TopBarWidget extends StatelessWidget {
             onTap: () => Get.find<NavigationController>().goToProfile(),
             child: Padding(
               padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
-              child: Obx(
-                () => CircleAvatar(
-                  backgroundImage: NetworkImage(
-                    '${Get.find<ProfileController>().profileInfo.value?.user.profilePicture}',
-                  ),
-                ),
-              ),
+              child: Obx(() {
+                final profile = Get.find<ProfileController>().profileInfo.value?.user.profilePicture;
+
+                return CircleAvatar(
+                  radius: 24,
+                  backgroundColor: Colors.grey.shade200,
+                  backgroundImage: profile != null && profile.isNotEmpty ? NetworkImage(profile) : null,
+                  child: profile == null || profile.isEmpty
+                      ? Icon(Icons.person, color: Colors.grey)
+                      : null,
+                );
+              })
             ),
-          ),
+            ),
         ],
       ),
     );
