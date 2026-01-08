@@ -8,7 +8,7 @@ class NavigationScreenMobile extends GetView<NavigationController> {
     return Scaffold(
       extendBody: true,
       body: Obx(() => controller.bodyPages[controller.selectedIndex.value]),
-      bottomNavigationBar: NavigationBarWidget(),
+      bottomNavigationBar: SafeArea(child: NavigationBarWidget()),
     );
   }
 }
