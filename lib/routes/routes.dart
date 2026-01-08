@@ -60,9 +60,9 @@ import '../views/player/screen/player_screen.dart';
 import '../views/policy/screen/policy_screen.dart';
 import '../views/preview/screen/preview_screen.dart';
 import '../views/reading/screen/reading_screen.dart';
-import '../views/sp/screen/sp_screen.dart';
 import '../views/splash/screens/splash_screen.dart';
 import '../views/subcription/screen/subcription_screen.dart';
+import '../views/subscription_with_revenuecat/screen/sp_screen.dart';
 import '../views/support/screen/support_screen.dart';
 import '../views/terms/screen/terms_screen.dart';
 

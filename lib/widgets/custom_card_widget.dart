@@ -61,71 +61,73 @@ class CustomItemsCardWidget<R> extends StatelessWidget {
             child: Container(
               margin: EdgeInsets.only(right: Dimensions.widthSize * 1.2),
               width: 135.w,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AspectRatio(
-                    aspectRatio: 0.85,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: CustomColor.secondary),
-                        borderRadius: BorderRadius.circular(
-                          Dimensions.radius * 0.85,
-                        ),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                          Dimensions.radius * 0.85,
-                        ),
-                        child: CachedNetworkImage(
-                          imageUrl: getImagePath(item),
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Shimmer.fromColors(
-                            baseColor: Colors.grey.shade300,
-                            highlightColor: Colors.grey.shade100,
-                            child: Container(color: Colors.grey),
-                          ),
-                          errorWidget: (context, url, error) => Icon(
-                            Icons.image_not_supported,
-                            color: CustomColor.secondary,
-                            size: 50,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AspectRatio(
+                      aspectRatio: 0.85,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: CustomColor.secondary),
+                          borderRadius: BorderRadius.circular(
+                            Dimensions.radius * 0.85,
                           ),
                         ),
-                      ),
-                    ),
-                  ),
-                  Space.height.v5,
-                  TextWidget(
-                    padding: Dimensions.horizontalSize.edgeHorizontal * 0.1,
-                    getTitle(item),
-                    fontWeight: FontWeight.bold,
-                    color: CustomColor.whiteColor,
-                    maxLines: 1,
-                    fontSize: Dimensions.titleSmall,
-                  ),
-                  Padding(
-                    padding: Dimensions.horizontalSize.edgeHorizontal * 0.1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: TextWidget(
-                            padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.verticalSize * 0.1,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                            Dimensions.radius * 0.85,
+                          ),
+                          child: CachedNetworkImage(
+                            imageUrl: getImagePath(item),
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Shimmer.fromColors(
+                              baseColor: Colors.grey.shade300,
+                              highlightColor: Colors.grey.shade100,
+                              child: Container(color: Colors.grey),
                             ),
-                            getSubtitle(item),
-                            maxLines: 1,
-                            textOverflow: TextOverflow.ellipsis,
-                            fontSize: Dimensions.titleSmall * 0.9,
-                            color: CustomColor.secondary,
+                            errorWidget: (context, url, error) => Icon(
+                              Icons.image_not_supported,
+                              color: CustomColor.secondary,
+                              size: 50,
+                            ),
                           ),
                         ),
-                        getTrailingIcon?.call(item) ??
-                            SvgPicture.asset(Assets.icons.headphone),
-                      ],
+                      ),
                     ),
-                  ),
-                ],
+                    Space.height.v5,
+                    TextWidget(
+                      padding: Dimensions.horizontalSize.edgeHorizontal * 0.1,
+                      getTitle(item),
+                      fontWeight: FontWeight.bold,
+                      color: CustomColor.whiteColor,
+                      maxLines: 1,
+                      fontSize: Dimensions.titleSmall,
+                    ),
+                    Padding(
+                      padding: Dimensions.horizontalSize.edgeHorizontal * 0.1,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: TextWidget(
+                              padding: EdgeInsets.symmetric(
+                                vertical: Dimensions.verticalSize * 0.1,
+                              ),
+                              getSubtitle(item),
+                              maxLines: 1,
+                              textOverflow: TextOverflow.ellipsis,
+                              fontSize: Dimensions.titleSmall * 0.9,
+                              color: CustomColor.secondary,
+                            ),
+                          ),
+                          getTrailingIcon?.call(item) ??
+                              SvgPicture.asset(Assets.icons.headphone),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
