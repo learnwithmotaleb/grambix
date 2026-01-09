@@ -45,6 +45,7 @@ class BottomWidget extends GetView<ReadingController> {
               onChanged: (value) {
                 controller.currentPage.value = value.toInt();
                 controller.pdfController?.jumpToPage(value.toInt());
+                controller.saveProgress();
               },
             ),
           ),

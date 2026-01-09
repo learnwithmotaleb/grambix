@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:get/get.dart';
+import 'package:grambix/core/api/model/basic_success_model.dart';
+import 'package:grambix/core/api/services/api_request.dart';
 import 'package:http/http.dart' as http;
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
@@ -65,10 +67,29 @@ class ReadingController extends GetxController {
     }
   }
 
-  /// Dispose safely
-  @override
-  void onClose() {
-    pdfController?.dispose();
-    super.onClose();
-  }
+
+  // set progress
+  RxBool progressSending =  false.obs;
+  Future<BasicSuccessModel> saveProgress() async {
+    return ApiRequest.put(fromJson: BasicSuccessModel.fromJson,
+        endPoint: "${ApiEndPoints.savingReadingProgress}${info.id}/progress",
+        isLoading: progressSending,
+        body: {
+          "currentPage": currentPage.value,
+          "totalPages": totalPages.value,
+          "currentTime": 0,
+          "totalDuration": 0,
+          "progress": readingProgress
+        }
+
+
+  );
 }
+
+
+/// Dispose safely
+@override
+void onClose() {
+  pdfController?.dispose();
+  super.onClose();
+}}

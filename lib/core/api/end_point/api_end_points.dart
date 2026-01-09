@@ -34,4 +34,8 @@ class ApiEndPoints {
   static const bookMark = 'home/save';
   static const bookMarkData = 'home/saved';
   static const userProgress = 'user-progress/continue';
+
+  //save progress
+
+static const savingReadingProgress  = 'api/user-progress/book';
 }

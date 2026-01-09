@@ -96,7 +96,7 @@ class ApiRequest {
 
       final response = await http
           .get(uri, headers: await _bearerHeaderInfo())
-          .timeout(const Duration(seconds: 2));
+          .timeout(const Duration(seconds: 120));
 
       // 🌟 Pretty print the response body here
       if (showResponse) {
@@ -304,4 +304,68 @@ class ApiRequest {
   static void printEndPointLog(String url) {
     log("📍 'End Point': '$url'");
   }
+
+
+
+
+
+  static Future<R> put<R>({
+    required R Function(Map<String, dynamic>) fromJson,
+    required String endPoint,
+    required RxBool isLoading,
+    required Map<String, dynamic> body,
+    Map<String, dynamic>? queryParams,
+    bool showSuccessSnackBar = false,
+    Function(R result)? onSuccess,
+  }) async {
+    try {
+      isLoading.value = true;
+      log('|📤|---------[ 📦 PUT REQUEST STARTED ]---------|📤|');
+
+      // ✅ Build URL with queryParams
+      final uri = Uri.parse(
+        '${ApiEndPoints.baseUrl}$endPoint',
+      ).replace(queryParameters: queryParams);
+
+      printEndPointLog(uri.toString());
+      printBodyLineByLine(body);
+
+      final response = await http
+          .put(uri, headers: await _bearerHeaderInfo(), body: jsonEncode(body))
+          .timeout(const Duration(seconds: 120));
+
+      log('|✅|---------[ ✅ PUT REQUEST COMPLETED ]---------|✅|');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final Map<String, dynamic> json = jsonDecode(response.body);
+        final result = fromJson(json);
+
+        final successMessage =
+            json['message'] ?? Strings.requestCompletedSuccessfully;
+        if (showSuccessSnackBar) {
+          CustomSnackBar.success(
+            title: Strings.success,
+            message: successMessage,
+          );
+        }
+        if (onSuccess != null) onSuccess(result);
+
+        return result;
+      } else {
+        final error = jsonDecode(response.body);
+        final errorMessage = error['message'] ?? 'Something went wrong!';
+        log('❌ Error: $errorMessage');
+        CustomSnackBar.error(errorMessage);
+        throw Exception(errorMessage);
+      }
+    } catch (e) {
+      log('🐞🐞🐞 UNHANDLED ERROR: ${e.toString()}');
+      throw Exception(e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+
+
 }

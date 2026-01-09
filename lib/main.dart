@@ -26,12 +26,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     print('WIDTH: ${size.width}, HEIGHT: ${size.height}');
-
-
     //Popular Android:
-    //
+
     // Size(411, 915) // Pixel 6
     //
+
+
     //
     // Popular iOS:
     //

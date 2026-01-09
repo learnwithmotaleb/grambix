@@ -3,6 +3,9 @@ import 'package:grambix/core/api/end_point/api_end_points.dart';
 import 'package:grambix/views/detail_preview/model/single_post_model.dart';
 import 'package:just_audio/just_audio.dart';
 
+import '../../../core/api/model/basic_success_model.dart';
+import '../../../core/api/services/api_request.dart';
+
 class PlayerController extends GetxController {
   final player = AudioPlayer();
 
@@ -103,6 +106,37 @@ class PlayerController extends GetxController {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
     return "${twoDigits(duration.inMinutes)}:${twoDigits(duration.inSeconds.remainder(60))}";
   }
+
+
+
+
+
+
+
+
+
+  // set progress
+  RxBool progressSending =  false.obs;
+  Future<BasicSuccessModel> saveProgress() async {
+    return ApiRequest.put(fromJson: BasicSuccessModel.fromJson,
+        endPoint: "${ApiEndPoints.savingReadingProgress}${selectedItem.id}/progress",
+        isLoading: progressSending,
+        body: {
+          "currentPage": 0,
+          "totalPages": 0,
+          "currentTime": currentPosition.value,
+          "totalDuration": totalDuration.value,
+          "progress": sliderValue.value
+        }
+
+
+    );
+  }
+
+
+
+
+
 
   @override
   void onClose() {

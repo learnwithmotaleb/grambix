@@ -9,6 +9,7 @@ class ReadingScreenMobile extends GetView<ReadingController> {
       () => Scaffold(
         backgroundColor: controller.isDark.value ? Colors.black : Colors.white,
         appBar: CommonAppBar(
+          isBack: true,
           title: controller.info.bookName,
           titleColor: controller.isDark.value ? Colors.white : Colors.black,
           borderColor: controller.isDark.value ? Colors.white : Colors.black,
