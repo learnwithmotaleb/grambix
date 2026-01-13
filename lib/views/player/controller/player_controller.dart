@@ -119,50 +119,6 @@ class PlayerController extends GetxController {
     }
   }
 
-
-
-
-
-
-
-  // Future<void> preloadSongs() async {
-  //   try {
-  //     print(
-  //       '******************************************************************************',
-  //     );
-  //     print(songUrls.first);
-  //     print(songUrls.length);
-  //     playlist = ConcatenatingAudioSource(
-  //       children: songUrls
-  //           .map((url) => AudioSource.uri(Uri.parse(url)))
-  //           .toList(),
-  //     );
-  //
-  //     await player.setAudioSource(playlist);
-  //
-  //     totalDuration.value = player.duration ?? Duration.zero;
-  //
-  //     player.positionStream.listen((pos) {
-  //       currentPosition.value = pos;
-  //       sliderValue.value = pos.inSeconds.toDouble();
-  //     });
-  //
-  //     player.playerStateStream.listen((state) {
-  //       isPlaying.value = state.playing;
-  //     });
-  //
-  //     player.durationStream.listen((duration) {
-  //       totalDuration.value = duration ?? Duration.zero;
-  //     });
-  //
-  //     player.currentIndexStream.listen((index) {
-  //       if (index != null) currentSongIndex.value = index;
-  //     });
-  //   } catch (e) {
-  //     print('Audio preload error: $e');
-  //   }
-  // }
-
   void togglePlayPause() {
     if (player.playing) {
       player.pause();
@@ -203,31 +159,35 @@ class PlayerController extends GetxController {
 
 
 
-  // set progress
-  RxBool progressSending =  false.obs;
+// set progress
+  RxBool progressSending = false.obs;
+
   Future<BasicSuccessModel> saveProgress() async {
-    return ApiRequest.put(fromJson: BasicSuccessModel.fromJson,
-        endPoint: "${ApiEndPoints.savingReadingProgress}${selectedItem.id}/progress",
-        isLoading: progressSending,
-        body: {
-          "currentPage": 0,
-          "totalPages": 0,
-          "currentTime": currentPosition.value,
-          "totalDuration": totalDuration.value,
-          "progress": sliderValue.value
-        }
-
-
+    return ApiRequest.put(
+      fromJson: BasicSuccessModel.fromJson,
+      endPoint: "${ApiEndPoints.savingReadingProgress}${selectedItem.id}/progress",
+      isLoading: progressSending,
+      body: {
+        "currentPage": 0,
+        "totalPages": 0,
+        "currentTime": currentPosition.value.inSeconds, // ✅ int value (seconds)
+        "totalDuration": totalDuration.value.inSeconds, // ✅ int value (seconds)
+        "progress": (currentPosition.value.inSeconds /
+            totalDuration.value.inSeconds * 100).round(), // ✅ percentage
+      },
     );
   }
 
 
-
-
-
-
   @override
   void onClose() {
+    print('${ApiEndPoints.savingReadingProgress}${selectedItem.id}/progress');
+
+    if (currentPosition.value.inSeconds > 0) {
+      saveProgress();
+      print('💾 Saving progress: ${formatDuration(currentPosition.value)}');
+    }
+
     player.dispose();
     super.onClose();
   }
