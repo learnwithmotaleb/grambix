@@ -18,6 +18,7 @@ class PlayerScreenMobile extends GetView<PlayerController> {
         leading: IconButton(
           onPressed: () {
             Get.back();
+            controller.saveProgress();
           },
           icon: Icon(
             Icons.keyboard_arrow_down_sharp,

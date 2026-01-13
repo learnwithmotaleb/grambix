@@ -29,7 +29,6 @@ class GrambixController extends GetxController {
   Future<void> initialCalls() async {
     isLoading.value = true;
     await Future.wait([getAllFavorite(), getUserProgress()]);
-
     isLoading.value = false;
   }
 
@@ -70,12 +69,12 @@ class GrambixController extends GetxController {
         );
         print('getUserProgress result: $result');
 
-        final reading = result.data.continueReading;
-        final listening = result.data.continueListening;
+        final reading = result.data?.continueReading;
+        final listening = result.data?.continueListening;
 
-        continueReadingList.assignAll(reading);
+        continueReadingList.assignAll(reading ?? []);
 
-        continueListeningList.assignAll(listening);
+        continueListeningList.assignAll(listening ?? []);
       },
     );
   }
