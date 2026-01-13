@@ -29,25 +29,29 @@ class BottomWidget extends GetView<ReadingController> {
           // Slider for page navigation
           Obx(
                 () => Slider(
-              padding: EdgeInsetsGeometry.zero,
-              min: 0,
-              max: (controller.totalPages.value > 0
-                  ? controller.totalPages.value.toDouble() - 1
-                  : 0),
-              value: controller.currentPage.value.toDouble().clamp(
-                0,
-                controller.totalPages.value > 0
-                    ? controller.totalPages.value.toDouble() - 1
-                    : 0,
-              ),
-              activeColor: CustomColor.blueColor,
-              inactiveColor: CustomColor.secondary.withAlpha(150),
-              onChanged: (value) {
-                controller.currentPage.value = value.toInt();
-                controller.pdfController?.jumpToPage(value.toInt());
-                controller.saveProgress();
-              },
-            ),
+                  padding: EdgeInsetsGeometry.zero,
+                  min: 0,
+                  max: (controller.totalPages.value > 0
+                      ? controller.totalPages.value.toDouble() - 1
+                      : 0),
+                  value: controller.currentPage.value.toDouble().clamp(
+                    0,
+                    controller.totalPages.value > 0
+                        ? controller.totalPages.value.toDouble() - 1
+                        : 0,
+                  ),
+                  activeColor: CustomColor.blueColor,
+                  inactiveColor: CustomColor.secondary.withAlpha(150),
+                  onChanged: (value) {
+                    final validPage = value.toInt().clamp(0, controller.totalPages.value - 1);
+                    controller.currentPage.value = validPage;
+                    controller.pdfController?.jumpToPage(validPage);
+                    print('📄 Slider: Page ${validPage + 1}/${controller.totalPages.value}');
+                  },
+                  onChangeEnd: (value) {
+                    controller.saveProgress();
+                  },
+                ),
           ),
 
           // Reading progress percentage

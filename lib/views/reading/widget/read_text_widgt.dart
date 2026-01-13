@@ -27,13 +27,13 @@ class ReadTextWidgt extends GetView<ReadingController> {
         ])
             : const ColorFilter.mode(Colors.transparent, BlendMode.multiply),
         child: PdfViewPinch(
-          controller: controller.pdfController!, // Safe to use !
+          controller: controller.pdfController!,
           scrollDirection: Axis.vertical,
           backgroundDecoration: BoxDecoration(
             color: controller.isDark.value ? Colors.black : Colors.white,
           ),
           onPageChanged: (page) {
-            controller.currentPage.value = page;
+            controller.setCurrentPage(page); // ✅ Use safe setter
           },
         ),
       );
