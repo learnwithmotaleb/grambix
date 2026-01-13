@@ -2,9 +2,10 @@ import 'package:get/get.dart';
 
 import '../../../../core/api/end_point/api_end_points.dart';
 import '../../../../core/api/services/api_request.dart';
+import '../../../detail_preview/model/single_post_model.dart';
 import '../../library/model/all_save_post_model.dart'
     show AllSavePostModel, Datum;
-import '../model/grambix_model.dart';
+import '../model/grambix_model.dart' hide Data;
 
 class GrambixController extends GetxController {
   final RxInt pageNumber = 2.obs;
@@ -21,7 +22,8 @@ class GrambixController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getAllFavorite();
+    // getAllFavorite();
+    initialCalls();
   }
 
   Future<void> initialCalls() async {
@@ -31,11 +33,13 @@ class GrambixController extends GetxController {
     isLoading.value = false;
   }
 
+  RxBool isFavoriteLoading = false.obs;
+
   Future<AllSavePostModel> getAllFavorite() async {
     return await ApiRequest.get(
       fromJson: AllSavePostModel.fromJson,
       endPoint: ApiEndPoints.bookMarkData,
-      isLoading: isLoading,
+      isLoading: isFavoriteLoading,
       onSuccess: (result) {
         allFavoriteList.clear();
         allFavoriteList.assignAll(result.data);
@@ -44,17 +48,59 @@ class GrambixController extends GetxController {
     );
   }
 
+  RxBool isContinueLoading = false.obs;
+
   Future<GrambixModel> getUserProgress() async {
     return await ApiRequest.get(
       fromJson: GrambixModel.fromJson,
       endPoint: ApiEndPoints.userProgress,
-      isLoading: isLoading,
+      isLoading: isContinueLoading,
       onSuccess: (result) {
-        print("Continue Reading: ${result.data.continueReading}");
-        print("Continue Listening: ${result.data.continueListening}");
-        continueReadingList.assignAll(result.data.continueReading);
-        continueListeningList.assignAll(result.data.continueListening);
+        print(
+          '*************************************************************************',
+        );
+        print(
+          '*************************************************************************',
+        );
+        print(
+          '*************************************************************************',
+        );
+        print(
+          '*************************************************************************',
+        );
+        print('getUserProgress result: $result');
+
+        final reading = result.data.continueReading;
+        final listening = result.data.continueListening;
+
+        continueReadingList.assignAll(reading);
+
+        continueListeningList.assignAll(listening);
       },
     );
   }
+RxBool isLoadingBookDetails = false.obs;
+
+// ✅ contentId দিয়ে full book details আনবে
+  Future<Data?> getBookDetailsById(String contentId) async {
+    try {
+      final result = await ApiRequest.get(
+        fromJson: SinglePostModel.fromJson,
+        endPoint: ApiEndPoints.singlePost,
+        queryParams: {'id': contentId}, // ✅ Query parameter hisebe pass koro
+        isLoading: isLoadingBookDetails,
+      );
+
+      return result.data;
+    } catch (e) {
+      print('❌ Error fetching book details: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to load audio details',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return null;
+    }
+  }
+
 }

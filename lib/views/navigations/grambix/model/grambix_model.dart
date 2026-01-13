@@ -1,13 +1,3 @@
-// To parse this JSON data, do
-//
-//     final grambixModel = grambixModelFromJson(jsonString);
-
-import 'dart:convert';
-
-GrambixModel grambixModelFromJson(String str) => GrambixModel.fromJson(json.decode(str));
-
-String grambixModelToJson(GrambixModel data) => json.encode(data.toJson());
-
 class GrambixModel {
   final int statusCode;
   final bool success;
@@ -27,33 +17,22 @@ class GrambixModel {
     message: json["message"],
     data: Data.fromJson(json["data"]),
   );
-
-  Map<String, dynamic> toJson() => {
-    "statusCode": statusCode,
-    "success": success,
-    "message": message,
-    "data": data.toJson(),
-  };
 }
 
 class Data {
   final List<ContinueIng> continueReading;
   final List<ContinueIng> continueListening;
 
-  Data({
-    required this.continueReading,
-    required this.continueListening,
-  });
+  Data({required this.continueReading, required this.continueListening});
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    continueReading: List<ContinueIng>.from(json["continueReading"].map((x) => ContinueIng.fromJson(x))),
-    continueListening: List<ContinueIng>.from(json["continueListening"].map((x) => ContinueIng.fromJson(x))),
+    continueReading: List<ContinueIng>.from(
+      json["continueReading"].map((x) => ContinueIng.fromJson(x)),
+    ),
+    continueListening: List<ContinueIng>.from(
+      json["continueListening"].map((x) => ContinueIng.fromJson(x)),
+    ),
   );
-
-  Map<String, dynamic> toJson() => {
-    "continueReading": List<dynamic>.from(continueReading.map((x) => x.toJson())),
-    "continueListening": List<dynamic>.from(continueListening.map((x) => x.toJson())),
-  };
 }
 
 class ContinueIng {
@@ -61,7 +40,9 @@ class ContinueIng {
   final String userId;
   final String contentId;
   final String contentType;
-  final int progress;
+  final dynamic progress;
+  final int readingProgress;
+  final int listeningProgress;
   final int currentPage;
   final int totalPages;
   final int currentTime;
@@ -81,6 +62,8 @@ class ContinueIng {
     required this.contentId,
     required this.contentType,
     required this.progress,
+    required this.readingProgress,
+    required this.listeningProgress,
     required this.currentPage,
     required this.totalPages,
     required this.currentTime,
@@ -101,6 +84,8 @@ class ContinueIng {
     contentId: json["contentId"],
     contentType: json["contentType"],
     progress: json["progress"],
+    readingProgress: json["readingProgress"],
+    listeningProgress: json["listeningProgress"],
     currentPage: json["currentPage"],
     totalPages: json["totalPages"],
     currentTime: json["currentTime"],
@@ -114,24 +99,4 @@ class ContinueIng {
     updatedAt: DateTime.parse(json["updatedAt"]),
     v: json["__v"],
   );
-
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "userId": userId,
-    "contentId": contentId,
-    "contentType": contentType,
-    "progress": progress,
-    "currentPage": currentPage,
-    "totalPages": totalPages,
-    "currentTime": currentTime,
-    "totalDuration": totalDuration,
-    "isCompleted": isCompleted,
-    "bookmarked": bookmarked,
-    "startedAt": startedAt.toIso8601String(),
-    "lastReadAt": lastReadAt.toIso8601String(),
-    "lastListenAt": lastListenAt.toIso8601String(),
-    "createdAt": createdAt.toIso8601String(),
-    "updatedAt": updatedAt.toIso8601String(),
-    "__v": v,
-  };
 }

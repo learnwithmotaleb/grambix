@@ -15,6 +15,7 @@ import 'package:grambix/widgets/loading_widget.dart';
 import 'package:grambix/widgets/primary_button_widget.dart';
 import 'package:grambix/widgets/text_widget.dart';
 import '../../../../widgets/custom_card_widget.dart';
+import '../../../player/screen/player_screen.dart';
 import '../controller/grambix_controller.dart';
 
 part 'grambix_screen_mobile.dart';
