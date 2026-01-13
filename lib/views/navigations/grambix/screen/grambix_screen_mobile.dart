@@ -6,20 +6,22 @@ class GrambixScreenMobile extends GetView<GrambixController> {
   @override
   Widget build(BuildContext context) {
     controller.getAllFavorite();
-     controller.getAllFavorite();
-     controller.getUserProgress();
+    controller.getAllFavorite();
+    controller.getUserProgress();
     return Scaffold(
       appBar: CommonAppBar(title: Strings.myGrambix, isBack: false),
       body: Obx(
         () => controller.isLoading.value
             ? LoadingWidget()
             : RefreshIndicator(
-          onRefresh: () async {
-                await controller.getAllFavorite();
-                await controller.getUserProgress();
-
-          },
-              child: SafeArea(
+                onRefresh: () async {
+                  controller.continueReadingList.clear();
+                  controller.continueReadingList.clear();
+                  controller.allFavoriteList.clear();
+                  await controller.getAllFavorite();
+                  await controller.getUserProgress();
+                },
+                child: SafeArea(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: Dimensions.defaultHorizontalSize,
@@ -70,14 +72,14 @@ class GrambixScreenMobile extends GetView<GrambixController> {
                               items: controller.continueListeningList,
                               getImagePath: (item) =>
                                   item.contentId?.bookCover ?? '',
-                              getTitle: (item) => item.contentId?.bookName ?? '',
+                              getTitle: (item) =>
+                                  item.contentId?.bookName ?? '',
                               getSubtitle: (item) =>
                                   item.contentId?.synopsis ?? '',
                               argument: (item) => item.id ?? '',
 
                               onTap: (item) async {
                                 try {
-
                                   final GrambixController grambixController =
                                       Get.find<GrambixController>();
                                   final bookData = await grambixController
@@ -122,19 +124,26 @@ class GrambixScreenMobile extends GetView<GrambixController> {
                               items: controller.continueReadingList,
                               getImagePath: (item) =>
                                   item.contentId?.bookCover ?? '',
-                              getTitle: (item) => item.contentId?.bookName ?? '',
+                              getTitle: (item) =>
+                                  item.contentId?.bookName ?? '',
                               getSubtitle: (item) =>
                                   item.contentId?.synopsis ?? '',
                               argument: (item) => item.id ?? '',
                               onTap: (item) async {
                                 try {
                                   // ✅ No dialog loading
-                                  print('🔍 Fetching book for contentId: ${item.contentId}');
+                                  print(
+                                    '🔍 Fetching book for contentId: ${item.contentId}',
+                                  );
 
-                                  final GrambixController grambixController = Get.find<GrambixController>();
+                                  final GrambixController grambixController =
+                                      Get.find<GrambixController>();
 
                                   // ✅ contentId দিয়ে API call
-                                  final  bookData = await grambixController.getBookDetailsById(item.contentId?.id ?? '');
+                                  final bookData = await grambixController
+                                      .getBookDetailsById(
+                                        item.contentId?.id ?? '',
+                                      );
 
                                   if (bookData != null) {
                                     print('✅ Book found: ${bookData.bookName}');
@@ -146,20 +155,31 @@ class GrambixScreenMobile extends GetView<GrambixController> {
                                         Routes.readingScreen,
                                         arguments: {
                                           'item': bookData,
-                                          'currentPage': item.currentPage, // ✅ Saved page (0-indexed)
+                                          'currentPage': item.currentPage,
+                                          // ✅ Saved page (0-indexed)
                                         },
                                       );
                                     } else {
-                                      Get.snackbar('Error', 'This book does not have a PDF file');
+                                      Get.snackbar(
+                                        'Error',
+                                        'This book does not have a PDF file',
+                                      );
                                     }
                                   } else {
-                                    print('❌ Book not found for contentId: ${item.contentId}');
-                                    Get.snackbar('Error', 'Failed to load book details');
+                                    print(
+                                      '❌ Book not found for contentId: ${item.contentId}',
+                                    );
+                                    Get.snackbar(
+                                      'Error',
+                                      'Failed to load book details',
+                                    );
                                   }
-
                                 } catch (e) {
                                   print('❌ Error in Continue Reading: $e');
-                                  Get.snackbar('Error', 'Something went wrong: $e');
+                                  Get.snackbar(
+                                    'Error',
+                                    'Something went wrong: $e',
+                                  );
                                 }
                               },
                               // getTrailingIcon: (item) => item.contentId == true
@@ -174,7 +194,7 @@ class GrambixScreenMobile extends GetView<GrambixController> {
                     ),
                   ),
                 ),
-            ),
+              ),
       ),
     );
   }

@@ -55,30 +55,40 @@ class GrambixController extends GetxController {
       endPoint: ApiEndPoints.userProgress,
       isLoading: isContinueLoading,
       onSuccess: (result) {
-        print(
-          '*************************************************************************',
-        );
-        print(
-          '*************************************************************************',
-        );
-        print(
-          '*************************************************************************',
-        );
-        print(
-          '*************************************************************************',
-        );
-        print('getUserProgress result: $result');
+        // ✅ Proper logging
+        print('✅ getUserProgress SUCCESS');
+        print('📖 Continue Reading: ${result.data?.continueReading?.length} items');
+        print('🎵 Continue Listening: ${result.data?.continueListening?.length} items');
 
         final reading = result.data?.continueReading;
         final listening = result.data?.continueListening;
 
         continueReadingList.assignAll(reading ?? []);
-
         continueListeningList.assignAll(listening ?? []);
+
+        // ✅ Debug individual items
+        if (reading?.isNotEmpty == true) {
+          print('\n📚 Continue Reading Items:');
+          for (var item in reading !) {
+            print('  - Book ID: ${item.contentId}');
+            print('    Current Page: ${item.currentPage! + 1}/${item.totalPages}');
+            print('    Progress: ${item.readingProgress}%');
+          }
+        }
+
+        if (listening!.isNotEmpty) {
+          print('\n🎧 Continue Listening Items:');
+          for (var item in listening) {
+            print('  - Audio ID: ${item.contentId}');
+            print('    Current Time: ${item.currentTime}s/${item.totalDuration}s');
+            print('    Progress: ${item.listeningProgress}%');
+          }
+        }
       },
     );
   }
-RxBool isLoadingBookDetails = false.obs;
+
+  RxBool isLoadingBookDetails = false.obs;
 
 // ✅ contentId দিয়ে full book details আনবে
   Future<Data?> getBookDetailsById(String contentId) async {

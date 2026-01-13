@@ -162,11 +162,9 @@ class ReadingController extends GetxController {
       endPoint: "${ApiEndPoints.savingReadingProgress}/${info.id}/progress",
       isLoading: progressSending,
       body: {
-        "currentPage": currentPage.value, // ✅ 0-indexed (backend should handle this)
-        "totalPages": totalPages.value,   // ✅ Actual PDF pages
-        "currentTime": 0,
-        "totalDuration": 0,
-        "progress": (readingProgress * 100).round(), // ✅ percentage
+        "currentPage": currentPage.value,
+        "totalPages": totalPages.value,
+        "progress": (readingProgress * 100).round(),
       },
     );
   }

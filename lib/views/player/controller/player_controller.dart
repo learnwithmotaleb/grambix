@@ -165,7 +165,7 @@ class PlayerController extends GetxController {
   Future<BasicSuccessModel> saveProgress() async {
     return ApiRequest.put(
       fromJson: BasicSuccessModel.fromJson,
-      endPoint: "${ApiEndPoints.savingReadingProgress}/${selectedItem.id}/progress",
+      endPoint: "${ApiEndPoints.savingListeningProgress}/${selectedItem.id}/progress",
       isLoading: progressSending,
       body: {
         "currentTime": currentPosition.value.inSeconds,
@@ -178,7 +178,7 @@ class PlayerController extends GetxController {
 
   @override
   void onClose() {
-    print('${ApiEndPoints.savingReadingProgress}/${selectedItem.id}/progress');
+    print('${ApiEndPoints.savingListeningProgress}/${selectedItem.id}/progress');
 
     if (currentPosition.value.inSeconds > 0) {
       saveProgress();
