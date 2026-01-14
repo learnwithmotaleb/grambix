@@ -1,12 +1,8 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
-// ================================
-// RevenueCat Service
-// ================================
 class RevenueCatService extends GetxController {
   // Singleton
   static final RevenueCatService _instance = RevenueCatService._internal();
@@ -39,16 +35,11 @@ class RevenueCatService extends GetxController {
     try {
       if (kDebugMode) Purchases.setLogLevel(LogLevel.debug);
 
-      PurchasesConfiguration configuration;
-      if (Platform.isIOS) {
-        configuration = PurchasesConfiguration(apiKeyIos);
-      } else if (Platform.isAndroid) {
-        configuration = PurchasesConfiguration(apiKeyAndroid);
-      } else {
-        return;
-      }
+      final config = PurchasesConfiguration(
+        Platform.isIOS ? apiKeyIos : apiKeyAndroid,
+      );
 
-      await Purchases.configure(configuration);
+      await Purchases.configure(config);
       await loadOfferings();
       await checkPremiumStatus();
     } catch (e) {
@@ -56,7 +47,7 @@ class RevenueCatService extends GetxController {
     }
   }
 
-  /// Load offerings from RevenueCat
+  /// Load offerings
   Future<void> loadOfferings() async {
     try {
       isLoading.value = true;
@@ -95,33 +86,7 @@ class RevenueCatService extends GetxController {
   }
 
   // -------------------------------
-  // Show RevenueCat Native Paywall
-  // -------------------------------
-  // Future<void> showPaywall() async {
-  //   try {
-  //     if (offerings.value == null) {
-  //       await loadOfferings();
-  //     }
-  //
-  //     if (offerings.value?.current != null) {
-  //       await Purchases.presentPaywall(); // Latest v5+ API
-  //     } else if (Get.context != null) {
-  //       ScaffoldMessenger.of(Get.context!).showSnackBar(
-  //         const SnackBar(content: Text("No offerings available")),
-  //       );
-  //     }
-  //   } catch (e) {
-  //     if (kDebugMode) print('Paywall error: $e');
-  //     if (Get.context != null) {
-  //       ScaffoldMessenger.of(Get.context!).showSnackBar(
-  //         SnackBar(content: Text('Paywall error: $e')),
-  //       );
-  //     }
-  //   }
-  // }
-
-  // -------------------------------
-  // Purchase a package manually (optional)
+  // Purchase a package manually
   // -------------------------------
   Future<bool> purchaseMonthly() async {
     try {
@@ -131,7 +96,8 @@ class RevenueCatService extends GetxController {
       }
 
       final pkg = currentOffering.availablePackages.firstWhereOrNull(
-              (p) => p.storeProduct.identifier == monthlySubscription);
+            (p) => p.storeProduct.identifier == monthlySubscription,
+      );
 
       if (pkg == null) return false;
 
@@ -139,8 +105,10 @@ class RevenueCatService extends GetxController {
       final active = result.customerInfo
           ?.entitlements.all[premiumEntitlement]?.isActive ??
           false;
+
       _latestCustomerInfo = result.customerInfo;
       _updatePremiumStatus(_latestCustomerInfo!);
+
       return active;
     } catch (e) {
       if (kDebugMode) print('Purchase error: $e');
@@ -185,5 +153,3 @@ extension FirstWhereOrNullExtension<E> on Iterable<E> {
     return null;
   }
 }
-
-
