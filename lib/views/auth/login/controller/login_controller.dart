@@ -14,10 +14,9 @@ class LoginController extends GetxController {
 
   @override
   void onInit() {
-    emailController.text = 'sdf55@yopmail.com';
-    passwordController.text = '111111';
+    emailController.text;
+    passwordController.text;
     super.onInit();
-
   }
 
   void onEmailChanged(String value) {

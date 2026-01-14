@@ -9,11 +9,13 @@ class BottomMusicBar extends GetView<PlayerController> {
       padding: EdgeInsets.symmetric(
         horizontal: Dimensions.defaultHorizontalSize,
       ),
-      child: Obx(
-        () => Column(
+      child: Obx(() {
+        // ✅ Loading check সরিয়ে দিলাম - শুধু normal UI থাকবে
+
+        return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Dynamic song title example
+            // Dynamic song title
             TextWidget(
               padding: EdgeInsets.only(bottom: Dimensions.verticalSize * 2.5),
               controller.selectedItem.bookName,
@@ -21,6 +23,8 @@ class BottomMusicBar extends GetView<PlayerController> {
               fontWeight: FontWeight.w600,
               color: CustomColor.whiteColor,
             ),
+
+            // Slider
             SliderTheme(
               data: SliderTheme.of(context).copyWith(
                 trackHeight: 2.0,
@@ -32,12 +36,26 @@ class BottomMusicBar extends GetView<PlayerController> {
               child: Slider(
                 padding: EdgeInsetsGeometry.zero,
                 min: 0,
-                max: controller.totalDuration.value.inSeconds.toDouble(),
-                value: controller.sliderValue.value,
+                // ✅ Max value - minimum 1 second to avoid division by zero
+                max: controller.totalDuration.value.inSeconds
+                    .toDouble()
+                    .clamp(1.0, double.infinity),
+
+                // ✅ Value clamp করো
+                value: controller.sliderValue.value.clamp(
+                  0.0,
+                  controller.totalDuration.value.inSeconds
+                      .toDouble()
+                      .clamp(1.0, double.infinity),
+                ),
+
                 onChanged: controller.seekTo,
               ),
             ),
+
             Space.height.v5,
+
+            // Time display
             Row(
               mainAxisAlignment: mainSpaceBet,
               children: [
@@ -51,12 +69,16 @@ class BottomMusicBar extends GetView<PlayerController> {
                 ),
               ],
             ),
+
             Space.height.v10,
 
+            // Control buttons
             Row(
               mainAxisAlignment: mainSpaceBet,
               children: [
                 const SizedBox(),
+
+                // Rewind button
                 Tooltip(
                   message: 'Rewind 10 seconds',
                   child: InkWell(
@@ -66,6 +88,8 @@ class BottomMusicBar extends GetView<PlayerController> {
                     child: SvgPicture.asset(Assets.icons.backWard),
                   ),
                 ),
+
+                // Play/Pause button
                 Tooltip(
                   message: controller.isPlaying.value ? 'Pause' : 'Play',
                   child: InkWell(
@@ -83,6 +107,8 @@ class BottomMusicBar extends GetView<PlayerController> {
                     ),
                   ),
                 ),
+
+                // Forward button
                 Tooltip(
                   message: 'Forward 10 seconds',
                   child: InkWell(
@@ -95,13 +121,15 @@ class BottomMusicBar extends GetView<PlayerController> {
                     ),
                   ),
                 ),
-              SizedBox()
+
+                const SizedBox(),
               ],
             ),
+
             Space.height.v20,
           ],
-        ),
-      ),
+        );
+      }),
     );
   }
 }

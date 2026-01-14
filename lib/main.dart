@@ -31,7 +31,6 @@ class MyApp extends StatelessWidget {
     // Size(411, 915) // Pixel 6
     //
 
-
     //
     // Popular iOS:
     //
