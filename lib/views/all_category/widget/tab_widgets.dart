@@ -14,8 +14,14 @@ class TrendingItems extends GetView<HomeController> {
               getTitle: (item) => item.bookName,
               getSubtitle: (item) => item.bookName,
               getImageUrl: (item) => item.bookCover,
-              getTrailingIcon: (item) => SvgPicture.asset(Assets.icons.glass),
+
               argument: (item) => item.id,
+
+              getTrailingIcon: (item) => item.isBook == true
+                  ? SvgPicture.asset(Assets.icons.music)
+                  : item.isEbook == true
+                  ? SvgPicture.asset(Assets.icons.glass)
+                  : SvgPicture.asset(Assets.icons.headphone),
             )
           : EmptyDataWidget(),
     );
@@ -36,8 +42,12 @@ class NewReleaseWidget extends GetView<HomeController> {
               getTitle: (item) => item.bookName,
               getSubtitle: (item) => item.bookName,
               getImageUrl: (item) => item.bookCover,
-              getTrailingIcon: (item) => SvgPicture.asset(Assets.icons.glass),
               argument: (item) => item.id,
+              getTrailingIcon: (item) => item.isBook == true
+                  ? SvgPicture.asset(Assets.icons.music)
+                  : item.isEbook == true
+                  ? SvgPicture.asset(Assets.icons.glass)
+                  : SvgPicture.asset(Assets.icons.headphone),
             )
           : EmptyDataWidget(),
     );
@@ -58,8 +68,12 @@ class RecommendedWidget extends GetView<HomeController> {
               getTitle: (item) => item.bookName,
               getSubtitle: (item) => item.bookName,
               getImageUrl: (item) => item.bookCover,
-              getTrailingIcon: (item) => SvgPicture.asset(Assets.icons.glass),
               argument: (item) => item.id,
+              getTrailingIcon: (item) => item.isBook == true
+                  ? SvgPicture.asset(Assets.icons.music)
+                  : item.isEbook == true
+                  ? SvgPicture.asset(Assets.icons.glass)
+                  : SvgPicture.asset(Assets.icons.headphone),
             )
           : EmptyDataWidget(),
     );
@@ -102,7 +116,8 @@ class AudioBooksWidget extends GetView<AllCategoryController> {
               getTitle: (item) => item.bookName,
               getSubtitle: (item) => item.synopsis,
               getImageUrl: (item) => item.bookCover,
-              getTrailingIcon: (item) => SvgPicture.asset(Assets.icons.glass),
+              getTrailingIcon: (item) =>
+                  SvgPicture.asset(Assets.icons.headphone),
               argument: (item) => item.id,
             )
           : EmptyDataWidget(),

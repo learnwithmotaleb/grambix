@@ -71,23 +71,10 @@ class CategoryWidget extends GetView<AllCategoryController> {
                           ),
                         ],
                       ),
-                      Wrap(
-                        children: [
-                          TextWidget(
-                            controller.pagination.value?.page.toString() ?? '',
-                            color: CustomColor.secondary,
-                            padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  Dimensions.defaultHorizontalSize * 0.6,
-                            ),
-                          ),
-
-                          Icon(
-                            Icons.arrow_forward_ios_outlined,
-                            size: Dimensions.iconSizeDefault,
-                            color: CustomColor.secondary,
-                          ),
-                        ],
+                      Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        size: Dimensions.iconSizeDefault,
+                        color: CustomColor.secondary,
                       ),
                     ],
                   ),

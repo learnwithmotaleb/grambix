@@ -26,6 +26,14 @@ class CustomColor {
   static Color rejected = HexColor('#DC3A3A');
   static Color bottomNavColor = HexColor('#00000033');
 
+  // Grey Shades (for Dark Mode)
+  static Color grey850 = const Color(0xFF212121);
+  static Color grey800 = const Color(0xFF424242);
+  static Color grey700 = const Color(0xFF616161);
+  static Color grey600 = const Color(0xFF757575);
+  static Color grey400 = const Color(0xFFBDBDBD);
+  static Color grey200 = const Color(0xFFEEEEEE);
+
   // Shade Color
   static CSM typographyShade = CSM(typography.value, typographyShadeToken);
   static CSM typographyDarkShade = CSM(typography.value, typoDarkShadeToken);

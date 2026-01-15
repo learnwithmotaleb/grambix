@@ -24,17 +24,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final size = MediaQuery.of(context).size;
+
+
+
     print('WIDTH: ${size.width}, HEIGHT: ${size.height}');
-    //Popular Android:
-
-    // Size(411, 915) // Pixel 6
-    //
-
-    //
-    // Popular iOS:
-    //
-    // Size(375, 812) // iPhone X
     return ScreenUtilInit(
       designSize: const Size(411, 915),
       minTextAdapt: true,
@@ -44,6 +39,7 @@ class MyApp extends StatelessWidget {
         initialRoute: Routes.splashScreen,
         title: Strings.appName,
         theme: Themes.light,
+
         darkTheme: Themes.dark,
         getPages: Routes.list,
         defaultTransition: Transition.cupertino,

@@ -25,6 +25,22 @@ class UpdateProfileController extends GetxController {
   RxBool isLoading = false.obs;
   final Rx<File?> selectedImg = Rx(null);
 
+  @override
+  void onInit() {
+    super.onInit();
+    _loadUserData();
+  }
+
+  void _loadUserData() {
+    final user = profileController.profileInfo.value?.user;
+
+    if (user != null) {
+      firstNameController.text = user.firstName ?? '';
+      lastNameController.text = user.lastName ?? '';
+      phoneController.text = user.phone ?? '';
+    }
+  }
+
   Future<void> pickImg() async {
     final pickedImg = await _imagePicker.pickImage(source: ImageSource.gallery);
     if (pickedImg != null) {
@@ -34,7 +50,6 @@ class UpdateProfileController extends GetxController {
     }
   }
 
-  /// Handle update profile process
   Future<UpdateProfileModel?> updateProfile() async {
     final Map<String, File?> fileMap = {};
     if (selectedImg.value != null) {
@@ -53,8 +68,18 @@ class UpdateProfileController extends GetxController {
       fromJson: UpdateProfileModel.fromJson,
       showSuccessSnackBar: true,
       onSuccess: (result) {
+        profileController.getProfileInfo();
         Get.offAllNamed(Routes.navigation);
       },
     );
+  }
+
+  @override
+  void onClose() {
+    phoneController.dispose();
+    passwordController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    super.onClose();
   }
 }

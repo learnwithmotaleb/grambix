@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:grambix/core/api/services/auth_services.dart';
+import 'package:grambix/views/auth/login/model/login_model.dart';
 
 import '../../../../core/helpers/helpers.dart';
 
@@ -12,13 +13,6 @@ class LoginController extends GetxController {
   RxString email = ''.obs;
   RxString emailError = ''.obs;
 
-  @override
-  void onInit() {
-    emailController.text;
-    passwordController.text;
-    super.onInit();
-  }
-
   void onEmailChanged(String value) {
     email.value = value;
     emailError.value = Helpers.emailValidator(value) ?? '';
@@ -26,7 +20,7 @@ class LoginController extends GetxController {
 
   RxBool isLoading = false.obs;
 
-  loginProcess() async {
+  Future<LoginModel> loginProcess() async {
     return await AuthServices.loginService(
       isLoading: isLoading,
       email: emailController.text,

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../core/utils/basic_import.dart';
 import '../../../../core/utils/layout.dart';
+import '../../../../core/utils/space.dart';
+import '../../../../widgets/primary_button_widget.dart';
+import '../../../../widgets/text_widget.dart';
 import '../controller/navigation_controller.dart';
 import '../widget/navigation_bar_widget.dart';
 part 'navigation_screen_mobile.dart';
