@@ -7,13 +7,12 @@ class ReadingScreenMobile extends GetView<ReadingController> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        // ✅ Back button চাপার আগে save করো
         if (controller.currentPage.value > 0) {
           print('💾 Saving before exit: Page ${controller.currentPage.value + 1}');
           await controller.saveProgress();
           print('✅ Save completed');
         }
-        return true; // Allow back navigation
+        return true;
       },
       child: Obx(
             () => Scaffold(

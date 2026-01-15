@@ -9,16 +9,12 @@ import '../../../core/api/services/api_request.dart';
 class PlayerController extends GetxController {
   final player = AudioPlayer();
 
-  // List of song URLs
   final List<String> songUrls = [];
 
   RxInt currentSongIndex = 0.obs;
   late Data selectedItem;
 
-
-
   Duration? initialPosition;
-
 
   RxDouble sliderValue = 0.0.obs;
   Rx<Duration> totalDuration = Duration.zero.obs;
@@ -27,17 +23,14 @@ class PlayerController extends GetxController {
 
   late ConcatenatingAudioSource playlist;
 
-
-
-
-  RxBool isLoadingData = true.obs;  // ✅ Book data loading
-  RxBool isLoadingAudio = true.obs; // ✅ Audio loading
+  RxBool isLoadingData = true.obs;
+  RxBool isLoadingAudio = true.obs;
 
   @override
   void onInit() {
     super.onInit();
 
-    isLoadingData.value = true; // ✅ Start loading
+    isLoadingData.value = true;
 
     final arguments = Get.arguments;
 
@@ -63,11 +56,12 @@ class PlayerController extends GetxController {
       return;
     }
 
-    isLoadingData.value = false; // ✅ Data loaded
+    isLoadingData.value = false;
 
     songUrls.add(selectedItem.audioFile);
     preloadSongs();
   }
+
   Future<void> preloadSongs() async {
     try {
       isLoadingAudio.value = true;
@@ -91,9 +85,8 @@ class PlayerController extends GetxController {
         print('✅ Seeked to: ${formatDuration(initialPosition!)}');
       }
 
-      isLoadingAudio.value = false; // ✅ Audio loaded
+      isLoadingAudio.value = false;
 
-      // Listeners
       player.positionStream.listen((pos) {
         currentPosition.value = pos;
         final maxSeconds = totalDuration.value.inSeconds.toDouble();
@@ -156,33 +149,65 @@ class PlayerController extends GetxController {
     return "${twoDigits(duration.inMinutes)}:${twoDigits(duration.inSeconds.remainder(60))}";
   }
 
-
-
-
-// set progress
   RxBool progressSending = false.obs;
 
   Future<BasicSuccessModel> saveProgress() async {
+    print('💾 Saving listening progress:');
+    print('   Current Time: ${formatDuration(currentPosition.value)}');
+    print('   Total Duration: ${formatDuration(totalDuration.value)}');
+    print(
+      '   Progress: ${(currentPosition.value.inSeconds / totalDuration.value.inSeconds * 100).round()}%',
+    );
+
+    // ✅ Determine content type
+    final contentType = _getContentType();
+
+    print('   Content Type: $contentType');
+
     return ApiRequest.put(
       fromJson: BasicSuccessModel.fromJson,
-      endPoint: "${ApiEndPoints.savingListeningProgress}/${selectedItem.id}/progress",
+      endPoint:
+      "${ApiEndPoints.savingListeningProgress}$contentType/${selectedItem.id}/progress",
       isLoading: progressSending,
       body: {
         "currentTime": currentPosition.value.inSeconds,
         "progress": (currentPosition.value.inSeconds /
-            totalDuration.value.inSeconds * 100).round(), // ✅ percentage
+            totalDuration.value.inSeconds *
+            100)
+            .round(),
       },
     );
   }
 
+  // ✅ Helper method to determine content type
+  String _getContentType() {
+    final hasPdf = selectedItem.pdfFile.isNotEmpty;
+    final hasAudio = selectedItem.audioFile.isNotEmpty;
+
+    // ✅ Both PDF and Audio available
+    if (hasPdf && hasAudio) {
+      return 'book';
+    }
+    // ✅ Only PDF available
+    else if (hasPdf) {
+      return 'ebook';
+    }
+    // ✅ Only Audio available
+    else if (hasAudio) {
+      return 'audiobook';
+    }
+    // ✅ Default fallback
+    else {
+      return 'book';
+    }
+  }
 
   @override
-  void onClose() {
-    print('${ApiEndPoints.savingListeningProgress}/${selectedItem.id}/progress');
-
+  void onClose() async {
     if (currentPosition.value.inSeconds > 0) {
-      saveProgress();
-      print('💾 Saving progress: ${formatDuration(currentPosition.value)}');
+      print('💾 Final save on exit: ${formatDuration(currentPosition.value)}');
+      await saveProgress();
+      print('✅ Progress saved successfully');
     }
 
     player.dispose();

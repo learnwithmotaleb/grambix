@@ -38,5 +38,5 @@ class ApiEndPoints {
   //save progress
 
 static const savingListeningProgress  = 'user-progress/audiobook';
-static const savingReadingProgress  = 'user-progress/ebook';
+static const savingReadingProgress  = 'user-progress/';
 }

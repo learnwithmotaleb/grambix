@@ -1,13 +1,32 @@
 part of 'grambix_screen.dart';
 
-class GrambixScreenMobile extends GetView<GrambixController> {
+class GrambixScreenMobile extends StatefulWidget {
   const GrambixScreenMobile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    controller.getAllFavorite();
-    controller.getUserProgress();
+  State<GrambixScreenMobile> createState() => _GrambixScreenMobileState();
+}
 
+class _GrambixScreenMobileState extends State<GrambixScreenMobile> {
+  final controller = Get.find<GrambixController>();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    controller.isLoading.value = true;
+    await Future.wait([
+      controller.getAllFavorite(),
+      controller.getUserProgress(),
+    ]);
+    controller.isLoading.value = false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: CommonAppBar(title: Strings.myGrambix, isBack: false),
       body: Obx(
@@ -15,18 +34,24 @@ class GrambixScreenMobile extends GetView<GrambixController> {
             ? LoadingWidget()
             : RefreshIndicator(
           onRefresh: _handleRefresh,
-          child: SafeArea(
+          child: controller.allFavoriteList.isEmpty &&
+              controller.continueListeningList.isEmpty &&
+              controller.continueReadingList.isEmpty
+              ? _buildEmptyState()
+              : SafeArea(
             child: Padding(
               padding: EdgeInsets.symmetric(
                 horizontal: Dimensions.defaultHorizontalSize,
               ),
               child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
                 child: Column(
                   crossAxisAlignment: crossStart,
                   children: [
                     _buildFavoriteBooks(),
                     _buildContinueListening(),
                     _buildContinueReading(),
+                    Space.height.v40,
                   ],
                 ),
               ),
@@ -41,8 +66,42 @@ class GrambixScreenMobile extends GetView<GrambixController> {
     controller.continueReadingList.clear();
     controller.continueListeningList.clear();
     controller.allFavoriteList.clear();
-    await controller.getAllFavorite();
-    await controller.getUserProgress();
+    await _loadData();
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: Column(
+          mainAxisAlignment: mainCenter,
+          children: [
+            Space.height.v40,
+            Space.height.v40,
+            Space.height.v20,
+            Icon(
+              Icons.book_outlined,
+              size: Dimensions.iconSizeLarge * 4,
+              color: CustomColor.secondary,
+            ),
+            Space.height.v20,
+            TextWidget(
+              'No books available',
+              fontSize: Dimensions.titleMedium,
+              color: CustomColor.secondary,
+              fontWeight: FontWeight.w600,
+            ),
+            Space.height.v10,
+            TextWidget(
+              'Start exploring and add books to your library',
+              fontSize: Dimensions.bodyMedium,
+              color: CustomColor.secondaryTextColor,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildFavoriteBooks() {
@@ -67,7 +126,11 @@ class GrambixScreenMobile extends GetView<GrambixController> {
           getTitle: (item) => item.bookName,
           getSubtitle: (item) => item.synopsis,
           argument: (item) => item.id,
-          getTrailingIcon: (item) => _getBookTypeIcon(item),
+          getTrailingIcon: (item) => item.isBook == true
+              ? SvgPicture.asset(Assets.icons.music)
+              : item.isEbook == true
+              ? SvgPicture.asset(Assets.icons.glass)
+              : SvgPicture.asset(Assets.icons.headphone),
         ),
       ],
     );
@@ -127,16 +190,6 @@ class GrambixScreenMobile extends GetView<GrambixController> {
         ),
       ],
     );
-  }
-
-  Widget _getBookTypeIcon(item) {
-    if (item.isEbook == true) {
-      return SvgPicture.asset(Assets.icons.music);
-    } else if (item.isEbook == false) {
-      return SvgPicture.asset(Assets.icons.headphone);
-    } else {
-      return SvgPicture.asset(Assets.icons.glass);
-    }
   }
 
   Future<void> _handleContinueListening(item) async {

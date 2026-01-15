@@ -4,7 +4,7 @@ import 'package:grambix/core/api/end_point/api_end_points.dart';
 import 'package:grambix/core/utils/basic_import.dart';
 import 'package:grambix/core/utils/extensions.dart';
 import 'package:grambix/core/utils/space.dart';
-import 'package:grambix/res/assets.dart';
+import 'package:grambix/res/assets.dart' hide Icons;
 import 'package:grambix/routes/routes.dart';
 import 'package:grambix/views/navigations/home/controller/home_controller.dart';
 import 'package:grambix/views/navigations/home/screen/home_screen.dart';

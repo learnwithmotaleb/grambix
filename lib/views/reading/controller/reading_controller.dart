@@ -1,4 +1,4 @@
-import 'dart:async'; // ✅ Timer এর জন্য
+import 'dart:async';
 import 'dart:io';
 import 'package:get/get.dart';
 import 'package:grambix/core/api/model/basic_success_model.dart';
@@ -24,40 +24,35 @@ class ReadingController extends GetxController {
 
   int? initialPage;
 
-  // ✅ Auto-save timer (optional)
   Timer? _autoSaveTimer;
 
   @override
   void onInit() {
     super.onInit();
 
-    // ✅ Arguments check - Map নাকি Data
     final arguments = Get.arguments;
 
     if (arguments is Map<String, dynamic>) {
-      // ✅ Continue Reading থেকে এসেছে (saved page সহ)
       info = arguments['item'] as Data;
 
-      if (arguments.containsKey('currentPage') && arguments['currentPage'] != null) {
+      if (arguments.containsKey('currentPage') &&
+          arguments['currentPage'] != null) {
         initialPage = arguments['currentPage'] as int;
         print('📖 Resuming from page: ${initialPage! + 1}');
       }
     } else if (arguments is Data) {
-      // ✅ Book Details থেকে এসেছে (fresh start)
       info = arguments;
       initialPage = null;
       print('📖 Starting from page 1');
     } else {
       print('❌ Invalid arguments');
       Get.back();
-      Get.snackbar('Error', 'Invalid book data');
+      CustomSnackBar.error('Invalid book data');
       return;
     }
 
     pdfUrl = info.pdfFile;
     loadPdf();
-
-    // ✅ Auto-save শুরু করো (optional)
     _startAutoSave();
   }
 
@@ -66,7 +61,6 @@ class ReadingController extends GetxController {
     return (currentPage.value + 1) / totalPages.value;
   }
 
-  // ✅ Safe page setter with validation
   void setCurrentPage(int page) {
     if (totalPages.value <= 0) {
       print('⚠️ Total pages not loaded yet');
@@ -83,8 +77,6 @@ class ReadingController extends GetxController {
     print('📄 Current: Page ${validPage + 1}/${totalPages.value}');
   }
 
-  /// Load PDF from network
-  /// Load PDF from network
   void loadPdf() async {
     try {
       isLoading.value = true;
@@ -94,61 +86,59 @@ class ReadingController extends GetxController {
       if (response.statusCode == 200) {
         final bytes = response.bodyBytes;
 
-        // ✅ Get ACTUAL total pages from PDF (not from backend)
         final tempDoc = await PdfDocument.openData(bytes);
         final actualTotalPages = tempDoc.pagesCount;
 
-        // ✅ Use actual PDF page count, NOT backend value
         totalPages.value = actualTotalPages;
 
         print('📄 Backend says: ${info.totalPages} pages');
         print('📄 Actual PDF has: $actualTotalPages pages');
 
-        // ✅ Validate initial page against ACTUAL total pages
         int startPage = 0;
         if (initialPage != null && actualTotalPages > 0) {
-          // Check if saved page is valid
           if (initialPage! >= 0 && initialPage! < actualTotalPages) {
             startPage = initialPage!;
-            print('✅ Resuming from saved page: ${startPage + 1}/$actualTotalPages');
+            print(
+              '✅ Resuming from saved page: ${startPage + 1}/$actualTotalPages',
+            );
           } else {
-            // Saved page is invalid, go to last page
             startPage = actualTotalPages - 1;
             print('⚠️ Saved page (${initialPage! + 1}) is out of range');
-            print('📖 Adjusted to last page: ${startPage + 1}/$actualTotalPages');
+            print(
+              '📖 Adjusted to last page: ${startPage + 1}/$actualTotalPages',
+            );
           }
         } else {
           print('📖 Starting from page 1');
         }
 
-        // ✅ Initialize controller with validated page
         pdfController = PdfControllerPinch(
           document: PdfDocument.openData(bytes),
-          initialPage: startPage + 1, // pdfx uses 1-indexed
+          initialPage: startPage + 1,
         );
 
         currentPage.value = startPage;
-
       } else {
         print("❌ Failed to load PDF: ${response.statusCode}");
-        Get.snackbar("Error", "Failed to load PDF");
+        CustomSnackBar.error('Failed to load PDF');
       }
     } catch (e) {
       print("❌ PDF Load Error: $e");
-      Get.snackbar("Error", "Failed to load PDF: $e");
+      CustomSnackBar.error('Failed to load PDF: $e');
     } finally {
       isLoading.value = false;
     }
-  }  void _startAutoSave() {
+  }
+
+  void _startAutoSave() {
     _autoSaveTimer = Timer.periodic(Duration(seconds: 20), (timer) {
       if (currentPage.value > 0 && !progressSending.value) {
         saveProgress();
-        print('🔄 Auto-saving reading progress: Page ${currentPage.value + 1}');
+        print('🔄 Auto-saving: Page ${currentPage.value + 1}');
       }
     });
   }
 
-  // set progress
   RxBool progressSending = false.obs;
 
   Future<BasicSuccessModel> saveProgress() async {
@@ -157,9 +147,14 @@ class ReadingController extends GetxController {
     print('   Total Pages: ${totalPages.value}');
     print('   Progress: ${(readingProgress * 100).round()}%');
 
+    final contentType = _getContentType();
+
+    print('   Content Type: $contentType');
+
     return ApiRequest.put(
       fromJson: BasicSuccessModel.fromJson,
-      endPoint: "${ApiEndPoints.savingReadingProgress}/${info.id}/progress",
+      endPoint:
+      "${ApiEndPoints.savingReadingProgress}$contentType/${info.id}/progress",
       isLoading: progressSending,
       body: {
         "currentPage": currentPage.value,
@@ -169,16 +164,43 @@ class ReadingController extends GetxController {
     );
   }
 
-  /// Dispose safely
+  String _getContentType() {
+    final hasPdf = info.pdfFile.isNotEmpty;
+    final hasAudio = info.audioFile.isNotEmpty;
+
+    print('🔍 Checking content type:');
+    print('   Has PDF: $hasPdf');
+    print('   Has Audio: $hasAudio');
+
+    // ✅ Both PDF and Audio available
+    if (hasPdf && hasAudio) {
+      print('✅ Content Type: book (both formats)');
+      return 'book';
+    }
+    // ✅ Only PDF available
+    else if (hasPdf) {
+      print('✅ Content Type: ebook');
+      return 'ebook';
+    }
+    // ✅ Only Audio available
+    else if (hasAudio) {
+      print('✅ Content Type: audiobook');
+      return 'audiobook';
+    }
+    // ✅ Default fallback
+    else {
+      print('⚠️ Content Type: book (default)');
+      return 'book';
+    }
+  }
+
   @override
   void onClose() async {
-    // ✅ Cancel auto-save timer
     _autoSaveTimer?.cancel();
 
-    // ✅ AWAIT করো - controller dispose হওয়ার আগে save complete হোক
     if (currentPage.value > 0) {
       print('💾 Final save on exit: Page ${currentPage.value + 1}');
-      await saveProgress(); // ✅ await added
+      await saveProgress();
       print('✅ Progress saved successfully');
     }
 

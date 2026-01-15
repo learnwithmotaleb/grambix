@@ -208,7 +208,7 @@ class ShapeContainer extends GetView<DetailPreviewController> {
             controller.saveBookMark();
           },
           child: Obx(
-                () => Icon(
+            () => Icon(
               controller.isFav.value ? Icons.bookmark : Icons.bookmark_border,
               color: controller.isFav.value
                   ? CustomColor.primary
