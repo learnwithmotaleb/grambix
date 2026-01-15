@@ -41,7 +41,6 @@ class BottomMusicBar extends GetView<PlayerController> {
                     .toDouble()
                     .clamp(1.0, double.infinity),
 
-                // ✅ Value clamp করো
                 value: controller.sliderValue.value.clamp(
                   0.0,
                   controller.totalDuration.value.inSeconds

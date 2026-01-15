@@ -82,6 +82,14 @@ class DetailPreviewController extends GetxController {
       String? pdfPath;
       String? imagePath;
 
+      int totalFiles = 0;
+      int completedFiles = 0;
+
+      // Calculate total files to download
+      if (item.audioFile.isNotEmpty) totalFiles++;
+      if (item.pdfFile.isNotEmpty) totalFiles++;
+      if (item.bookCover.isNotEmpty) totalFiles++;
+
       // 1️⃣ Download Audio
       if (item.audioFile.isNotEmpty) {
         final audioFileName = item.audioFile.split('/').last;
@@ -91,11 +99,15 @@ class DetailPreviewController extends GetxController {
           audioFile.path,
           onReceiveProgress: (received, total) {
             if (total != -1) {
-              downloadProgress.value = received / total;
+              final fileProgress = received / total;
+              downloadProgress.value =
+                  (completedFiles + fileProgress) / totalFiles;
             }
           },
         );
         audioPath = audioFile.path;
+        completedFiles++;
+        downloadProgress.value = completedFiles / totalFiles;
       }
 
       // 2️⃣ Download PDF
@@ -105,8 +117,17 @@ class DetailPreviewController extends GetxController {
         await dio.download(
           item.pdfFile,
           pdfFile.path,
+          onReceiveProgress: (received, total) {
+            if (total != -1) {
+              final fileProgress = received / total;
+              downloadProgress.value =
+                  (completedFiles + fileProgress) / totalFiles;
+            }
+          },
         );
         pdfPath = pdfFile.path;
+        completedFiles++;
+        downloadProgress.value = completedFiles / totalFiles;
       }
 
       // 3️⃣ Download Image
@@ -116,11 +137,20 @@ class DetailPreviewController extends GetxController {
         await dio.download(
           item.bookCover,
           imgFile.path,
+          onReceiveProgress: (received, total) {
+            if (total != -1) {
+              final fileProgress = received / total;
+              downloadProgress.value =
+                  (completedFiles + fileProgress) / totalFiles;
+            }
+          },
         );
         imagePath = imgFile.path;
+        completedFiles++;
+        downloadProgress.value = completedFiles / totalFiles;
       }
 
-      // 4️⃣ Save Metadata (Title + Synopsis + File Paths)
+      // 4️⃣ Save Metadata
       final metaData = {
         "id": item.id,
         "title": item.bookName,
@@ -131,11 +161,9 @@ class DetailPreviewController extends GetxController {
         "totalPage": item.totalPages,
       };
 
-      // 🔹 Individual meta file (optional, one per book)
       final metaFile = File('${dir.path}/${item.id}_meta.json');
       await metaFile.writeAsString(jsonEncode(metaData));
 
-      // 🔹 Add to downloads list
       final listFile = File('${dir.path}/downloads_list.json');
       List<dynamic> downloads = [];
       if (await listFile.exists()) {
@@ -143,12 +171,12 @@ class DetailPreviewController extends GetxController {
         downloads = jsonDecode(content);
       }
 
-      // যদি আগে থেকেই একই আইডি থাকে, পুরানটা রিমুভ করে নতুনটা add করবো
       downloads.removeWhere((d) => d["id"] == item.id);
       downloads.add(metaData);
 
       await listFile.writeAsString(jsonEncode(downloads));
 
+      downloadProgress.value = 1.0;
       isDownloading.value = false;
 
       CustomSnackBar.success(
@@ -159,11 +187,11 @@ class DetailPreviewController extends GetxController {
       print("✅ Downloaded & Added to List: $metaData");
     } catch (e) {
       isDownloading.value = false;
+      downloadProgress.value = 0.0;
       CustomSnackBar.error("Download failed");
       print('❌ Download error: $e');
     }
   }
-
   /// Fetch preview data
   Future<SinglePostModel> getPreviewData() async {
     return await ApiRequest.get(

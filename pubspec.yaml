@@ -38,7 +38,7 @@ dependencies:
   flutter_html: ^3.0.0
   path_provider: ^2.0.17
   pdfx:
-  dio:    # for downloading files
+  dio:
   in_app_purchase: ^3.2.3
   purchases_flutter: ^9.9.7
 

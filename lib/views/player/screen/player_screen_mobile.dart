@@ -9,7 +9,7 @@ class PlayerScreenMobile extends GetView<PlayerController> {
       extendBody: true,
       bottomNavigationBar: Obx(() =>
       (controller.isLoadingData.value || controller.isLoadingAudio.value)
-          ? const SizedBox.shrink()  // ✅ Empty widget instead of null
+          ? const SizedBox.shrink()
           : SafeArea(child: BottomMusicBar())
       ),
       extendBodyBehindAppBar: true,
