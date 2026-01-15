@@ -17,8 +17,7 @@ class ShapeContainer extends GetView<DetailPreviewController> {
     }
 
     return Container(
-      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.16),
-
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.14),
       padding: EdgeInsets.symmetric(
         vertical: Dimensions.verticalSize,
         horizontal: Dimensions.defaultHorizontalSize,
@@ -34,7 +33,6 @@ class ShapeContainer extends GetView<DetailPreviewController> {
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         children: [
-          /// --- Top Select Button / Ebook / AudioBook
           if (data.audioFile.isNotEmpty && data.pdfFile.isNotEmpty) ...[
             const SelectButton(),
           ] else if (data.audioFile.isNotEmpty) ...[

@@ -18,7 +18,7 @@ class TopTextHeading extends GetView<DetailPreviewController> {
             controller.singleData.first.bookName,
             fontSize: Dimensions.titleLarge * 0.9,
             fontWeight: FontWeight.w600,
-
+            textAlign: TextAlign.center,
             color: Colors.white,
           ),
           TextWidget(

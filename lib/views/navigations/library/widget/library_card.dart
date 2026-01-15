@@ -236,7 +236,7 @@ class LibrrayCard extends GetView<LibraryController> {
                   ),
                 ),
                 item['pdf'] != null && item['audio'] != null
-                    ? SvgPicture.asset(Assets.icons.music) // both exist
+                    ? SvgPicture.asset(Assets.icons.music)
                     : item['pdf'] != null
                     ? SvgPicture.asset(Assets.icons.glass) // only pdf
                     : item['audio'] != null
