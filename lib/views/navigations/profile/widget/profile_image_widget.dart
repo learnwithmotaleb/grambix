@@ -12,53 +12,83 @@ class ProfileImageWidget extends GetView<ProfileController> {
             children: [
               Obx(() {
                 final profile = controller.profileInfo.value?.user;
+                final hasProfilePicture = profile?.profilePicture != null &&
+                    profile!.profilePicture.isNotEmpty;
 
-                return CircleAvatar(
-                  radius: Dimensions.radius * 5,
-                  backgroundColor: CustomColor.secondary,
+                return Container(
+                  width: 110.w,
+                  height: 110.h,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: CustomColor.primary.withOpacity(0.3),
+                      width: 2,
+                    ),
+                  ),
                   child: ClipOval(
-                    child:
-                        (profile?.profilePicture != null &&
-                            profile!.profilePicture.isNotEmpty
-                        ? Image.network(
-                            profile.profilePicture,
-                            height: 110.h,
-                            width: 110.w,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) => Icon(
-                              Icons.person,
-                              size: 110,
-                              color: CustomColor.secondary,
-                            ),
-                          )
-                        : Icon(
-                            Icons.person,
-                            size: 110,
-                            color: CustomColor.secondary,
-                          )),
+                    child: hasProfilePicture
+                        ? CachedNetworkImage(
+                      imageUrl: profile.profilePicture,
+                      fit: BoxFit.cover,
+                      width: 110.w,
+                      height: 110.h,
+                      placeholder: (context, url) => Container(
+                        color: CustomColor.secondary.withOpacity(0.1),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: CustomColor.primary,
+                            strokeWidth: 2,
+                          ),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: CustomColor.secondary.withOpacity(0.1),
+                        child: Icon(
+                          Icons.person,
+                          size: 55.h,
+                          color: CustomColor.secondary,
+                        ),
+                      ),
+                    )
+                        : Container(
+                      color: CustomColor.secondary.withOpacity(0.1),
+                      child: Icon(
+                        Icons.person,
+                        size: 55.h,
+                        color: CustomColor.secondary,
+                      ),
+                    ),
                   ),
                 );
               }),
-              // 📷 Camera icon
               Positioned(
-                bottom: 4,
+                bottom: 0,
                 right: 0,
                 child: InkWell(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onTap: () => Get.toNamed(Routes.updateProfileScreen),
                   child: Container(
-                    padding: EdgeInsets.all(Dimensions.paddingSize * 0.1),
+                    padding: EdgeInsets.all(Dimensions.paddingSize * 0.35),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
+                      color: CustomColor.primary,
                       border: Border.all(
-                        color: CustomColor.whiteColor.withAlpha(88),
+                        color: CustomColor.whiteColor,
+                        width: 2.5,
                       ),
-                      color: CustomColor.secondary,
+                      boxShadow: [
+                        BoxShadow(
+                          color: CustomColor.blackColor.withOpacity(0.15),
+                          blurRadius: 8,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
                     ),
                     child: Icon(
                       Icons.camera_alt_outlined,
-                      color: CustomColor.primary,
+                      color: CustomColor.whiteColor,
+                      size: Dimensions.iconSizeDefault * 1.1,
                     ),
                   ),
                 ),

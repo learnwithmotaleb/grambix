@@ -15,74 +15,92 @@ class UpdateProfileScreenMobile extends GetView<UpdateProfileController> {
             Center(
               child: Stack(
                 children: [
-                  CircleAvatar(
-                    radius: Dimensions.radius * 5,
-                    backgroundColor: CustomColor.secondary,
-                    child: Obx(() {
-                      final file = controller.selectedImg.value;
-                      final info = controller.profileController.profileInfo.value?.user;
+                  Obx(() {
+                    final selectedFile = controller.selectedImg.value;
+                    final profilePicture = controller.profileController.profileInfo.value?.user?.profilePicture;
+                    final hasNetworkImage = profilePicture != null && profilePicture.isNotEmpty;
 
-                      return file == null
-                          ? ClipOval(
-                        child: file != null
+                    return Container(
+                      width: 110.w,
+                      height: 110.h,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: CustomColor.primary.withOpacity(0.3),
+                          width: 2,
+                        ),
+                      ),
+                      child: ClipOval(
+                        child: selectedFile != null
                             ? Image.file(
-                          file,
-                          height: 110.h,
+                          selectedFile,
                           width: 110.w,
+                          height: 110.h,
                           fit: BoxFit.cover,
                         )
-                            : (info?.profilePicture != null &&
-                            info!.profilePicture.isNotEmpty
-                            ? Image.network(
-                          info.profilePicture,
-                          height: 110.h,
-                          width: 110.w,
+                            : hasNetworkImage
+                            ? CachedNetworkImage(
+                          imageUrl: profilePicture,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Icon(
-                                Icons.person,
-                                size: 110,
-                                color: CustomColor.secondary,
+                          width: 110.w,
+                          height: 110.h,
+                          placeholder: (context, url) => Container(
+                            color: CustomColor.secondary.withOpacity(0.1),
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: CustomColor.primary,
+                                strokeWidth: 2,
                               ),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Container(
+                            color: CustomColor.secondary.withOpacity(0.1),
+                            child: Icon(
+                              Icons.person,
+                              size: 55.h,
+                              color: CustomColor.secondary,
+                            ),
+                          ),
                         )
-                            : Icon(
-                          Icons.person,
-                          size: 110,
-                          color: CustomColor.secondary,
-                        )),
-                      )
-                          : ClipOval(
-                              child: Image.file(
-                                file,
-                                height: 110.h,
-                                width: 110.w,
-                                fit: BoxFit.cover,
-                              ),
-                            );
-                    }),
-                  ),
-
+                            : Container(
+                          color: CustomColor.secondary.withOpacity(0.1),
+                          child: Icon(
+                            Icons.person,
+                            size: 55.h,
+                            color: CustomColor.secondary,
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
                   Positioned(
-                    bottom: 4,
+                    bottom: 0,
                     right: 0,
                     child: InkWell(
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
-                      onTap: () {
-                        controller.pickImg();
-                      },
+                      onTap: controller.pickImg,
                       child: Container(
-                        padding: EdgeInsets.all(Dimensions.paddingSize * 0.1),
+                        padding: EdgeInsets.all(Dimensions.paddingSize * 0.35),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
+                          color: CustomColor.primary,
                           border: Border.all(
-                            color: CustomColor.whiteColor.withAlpha(88),
+                            color: CustomColor.whiteColor,
+                            width: 2.5,
                           ),
-                          color: CustomColor.secondary,
+                          boxShadow: [
+                            BoxShadow(
+                              color: CustomColor.blackColor.withOpacity(0.15),
+                              blurRadius: 8,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
                         ),
                         child: Icon(
                           Icons.camera_alt_outlined,
-                          color: CustomColor.primary,
+                          color: CustomColor.whiteColor,
+                          size: Dimensions.iconSizeDefault * 1.1,
                         ),
                       ),
                     ),
