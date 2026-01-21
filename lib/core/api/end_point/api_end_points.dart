@@ -11,6 +11,8 @@ class ApiEndPoints {
   static const resetPassword = 'auth/reset-password';
   static const forgotPassword = 'auth/forgot-password';
 
+
+
   //home
   static const banner = 'banner/get';
   static const privacy = 'manage/get-privacy-policy';
@@ -37,6 +39,6 @@ class ApiEndPoints {
 
   //save progress
 
-static const savingListeningProgress  = 'user-progress/';
-static const savingReadingProgress  = 'user-progress/';
+  static const savingListeningProgress = 'user-progress/';
+  static const savingReadingProgress = 'user-progress/';
 }

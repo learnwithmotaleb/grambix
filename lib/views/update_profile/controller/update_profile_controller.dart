@@ -35,9 +35,9 @@ class UpdateProfileController extends GetxController {
     final user = profileController.profileInfo.value?.user;
 
     if (user != null) {
-      firstNameController.text = user.firstName ?? '';
-      lastNameController.text = user.lastName ?? '';
-      phoneController.text = user.phone ?? '';
+      firstNameController.text = user.firstName;
+      lastNameController.text = user.lastName;
+      phoneController.text = user.phone;
     }
   }
 

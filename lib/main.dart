@@ -12,11 +12,10 @@ import 'initial.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Get.put(NetworkController());
-  // Initialize GetX
+
   Get.put(RevenueCatService());
   await Initial.init();
   runApp(const MyApp());
-
 }
 
 class MyApp extends StatelessWidget {
@@ -24,10 +23,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final size = MediaQuery.of(context).size;
-
-
 
     print('WIDTH: ${size.width}, HEIGHT: ${size.height}');
     return ScreenUtilInit(
