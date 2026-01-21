@@ -11,19 +11,6 @@ import '../core/utils/space.dart';
 import '../routes/routes.dart';
 import '../views/navigations/home/screen/home_screen.dart';
 
-import 'dart:math';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:grambix/core/api/end_point/api_end_points.dart';
-import 'package:grambix/core/utils/extensions.dart';
-import 'package:grambix/res/assets.dart' hide Icons;
-import 'package:grambix/widgets/text_widget.dart';
-import 'package:shimmer/shimmer.dart';
-import '../core/utils/basic_import.dart';
-import '../core/utils/space.dart';
-import '../routes/routes.dart';
-import '../views/navigations/home/screen/home_screen.dart';
-
 class CustomItemsCardWidget<R> extends StatelessWidget {
   final List<R> items;
   final void Function(R item)? onTap;
