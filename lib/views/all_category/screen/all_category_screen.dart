@@ -9,6 +9,7 @@ import 'package:grambix/routes/routes.dart';
 import 'package:grambix/views/all_category/widget/app_hader_widget.dart';
 import 'package:grambix/widgets/empty_data_widget.dart';
 import 'package:grambix/widgets/loading_widget.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../core/themes/token.dart';
 import '../../../core/utils/dimensions.dart';
 import '../../../core/utils/layout.dart';

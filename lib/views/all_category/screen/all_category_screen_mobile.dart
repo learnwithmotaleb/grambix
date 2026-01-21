@@ -32,7 +32,7 @@ class AllCategoryScreenMobile extends GetView<AllCategoryController> {
             },
             tabs: List.generate(
               controller.tabSectionList.length,
-              (index) => Tab(
+                  (index) => Tab(
                 child: Text(
                   controller.tabSectionList[index],
                   style: TextStyle(
@@ -48,7 +48,10 @@ class AllCategoryScreenMobile extends GetView<AllCategoryController> {
           child: TabBarView(
             children: List.generate(
               controller.tabSectionList.length,
-              (index) => controller.buildTabBody(index),
+                  (index) => SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: controller.buildTabBody(index),
+              ),
             ),
           ),
         ),

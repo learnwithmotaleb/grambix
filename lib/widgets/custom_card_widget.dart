@@ -36,12 +36,12 @@ class CustomItemsCardWidget<R> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 210.h,
+      height: 220.h,
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
-        cacheExtent: 500,
+        padding: EdgeInsets.zero,
         itemCount: min(items.length, 5),
         itemBuilder: (context, index) {
           final item = items[index];
@@ -59,70 +59,98 @@ class CustomItemsCardWidget<R> extends StatelessWidget {
               }
             },
             child: Container(
-              margin: EdgeInsets.only(right: Dimensions.widthSize * 1.2),
-              width: 135.w,
+              margin: EdgeInsets.only(right: Dimensions.widthSize * 1.5),
+              width: 130.w,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  AspectRatio(
-                    aspectRatio: 0.85,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: CustomColor.secondary),
-                        borderRadius: BorderRadius.circular(
-                          Dimensions.radius * 0.85,
-                        ),
+                  // Image Container
+                  Container(
+                    height: 170.h,
+                    width: 130.w,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        Dimensions.radius * 0.8,
                       ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                          Dimensions.radius * 0.85,
-                        ),
-                        child: CachedNetworkImage(
-                          imageUrl: getImagePath(item),
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Shimmer.fromColors(
-                            baseColor: Colors.grey.shade300,
-                            highlightColor: Colors.grey.shade100,
-                            child: Container(color: Colors.grey),
+                      border: Border.all(
+                        color: CustomColor.secondary.withOpacity(0.3),
+                        width: 1,
+                      ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(
+                        Dimensions.radius * 0.8,
+                      ),
+                      child: CachedNetworkImage(
+                        imageUrl: getImagePath(item),
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Shimmer.fromColors(
+                          baseColor: Colors.grey.shade800,
+                          highlightColor: Colors.grey.shade700,
+                          child: Container(
+                            color: Colors.grey.shade800,
                           ),
-                          errorWidget: (context, url, error) => Icon(
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          color: CustomColor.secondary.withOpacity(0.1),
+                          child: Icon(
                             Icons.image_not_supported,
                             color: CustomColor.secondary,
-                            size: 50,
+                            size: 40.h,
                           ),
                         ),
                       ),
                     ),
                   ),
                   Space.height.v5,
-                  TextWidget(
-                    padding: Dimensions.horizontalSize.edgeHorizontal * 0.1,
-                    getTitle(item),
-                    fontWeight: FontWeight.bold,
-                    color: CustomColor.whiteColor,
-                    maxLines: 1,
-                    fontSize: Dimensions.titleSmall,
-                  ),
+
+                  // Title
                   Padding(
-                    padding: Dimensions.horizontalSize.edgeHorizontal * 0.1,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.widthSize * 0.3,
+                    ),
+                    child: TextWidget(
+                      getTitle(item),
+                      fontWeight: FontWeight.w600,
+                      color: CustomColor.whiteColor,
+                      maxLines: 1,
+                      textOverflow: TextOverflow.ellipsis,
+                      fontSize: Dimensions.titleSmall * 0.95,
+                    ),
+                  ),
+
+                  // Subtitle & Icon Row
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Dimensions.widthSize * 0.3,
+                      vertical: Dimensions.heightSize * 0.2,
+                    ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
                           child: TextWidget(
-                            padding: EdgeInsets.symmetric(
-                              vertical: Dimensions.verticalSize * 0.1,
-                            ),
                             getSubtitle(item),
                             maxLines: 1,
                             textOverflow: TextOverflow.ellipsis,
-                            fontSize: Dimensions.titleSmall * 0.9,
+                            fontSize: Dimensions.titleSmall * 0.85,
                             color: CustomColor.secondary,
                           ),
                         ),
-                        getTrailingIcon?.call(item) ??
-                            SvgPicture.asset(Assets.icons.headphone),
+                        Space.width.v5,
+                        SizedBox(
+                          height: 18.h,
+                          width: 18.w,
+                          child: getTrailingIcon?.call(item) ??
+                              SvgPicture.asset(
+                                Assets.icons.headphone,
+                                fit: BoxFit.contain,
+                                colorFilter: ColorFilter.mode(
+                                  CustomColor.secondary,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                        ),
                       ],
                     ),
                   ),

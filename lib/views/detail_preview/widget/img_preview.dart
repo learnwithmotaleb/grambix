@@ -12,7 +12,7 @@ class ImgPreview extends GetView<DetailPreviewController> {
           maxHeight: 220.h,
         ),
         child: AspectRatio(
-          aspectRatio: 0.85,
+          aspectRatio: 0.12 / 0.16,
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(color: CustomColor.secondary),
@@ -20,15 +20,22 @@ class ImgPreview extends GetView<DetailPreviewController> {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(Dimensions.radius * 0.85),
-              child: CachedNetworkImage(
+              child:
+              CachedNetworkImage(
                 imageUrl: controller.singleData.first.bookCover,
                 fit: BoxFit.cover,
+                placeholder: (context, url) => Center(
+                  child: CircularProgressIndicator(
+                    color: CustomColor.primary,
+                  ),
+                ),
                 errorWidget: (context, url, error) => Icon(
-                  Icons.image_not_supported,
+                  Icons.error,
                   color: CustomColor.secondary,
-                  size: 50,
                 ),
               ),
+
+
             ),
           ),
         ),
