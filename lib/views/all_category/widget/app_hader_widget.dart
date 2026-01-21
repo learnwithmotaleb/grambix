@@ -20,52 +20,37 @@ class AppHaderWidget extends StatelessWidget {
             Assets.logo.appLogo,
             height: Dimensions.heightSize * 4.5,
           ),
-          Wrap(
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              InkWell(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onTap: () => Get.toNamed(Routes.searchSongScreen),
-                child: SvgPicture.asset(
-                  Assets.icons.search,
-                  color: CustomColor.secondary,
-                  height: Dimensions.heightSize * 2,
-                ),
+          InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onTap: () => Get.find<NavigationController>().goToProfile(),
+            child: Padding(
+              padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
+              child: CircleAvatar(
+                backgroundColor: Colors.grey.shade300,
+                radius: 17,
+                backgroundImage:
+                Get.find<ProfileController>()
+                    .profileInfo
+                    .value
+                    ?.user
+                    .profilePicture !=
+                    null
+                    ? NetworkImage(
+                  Get.find<ProfileController>().profileInfo.value!.user.profilePicture,
+                )
+                    : null, // Fallback if there is no profile picture
+                child:
+                Get.find<ProfileController>()
+                    .profileInfo
+                    .value
+                    ?.user
+                    .profilePicture ==
+                    null
+                    ? Icon(Icons.person, color: Colors.white, size: 20)
+                    : null,
               ),
-              InkWell(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onTap: () => Get.find<NavigationController>().goToProfile(),
-                child: Padding(
-                  padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.grey.shade300,
-                    radius: 17,
-                    backgroundImage:
-                        Get.find<ProfileController>()
-                                .profileInfo
-                                .value
-                                ?.user
-                                .profilePicture !=
-                            null
-                        ? NetworkImage(
-                            Get.find<ProfileController>().profileInfo.value!.user.profilePicture,
-                          )
-                        : null, // Fallback if there is no profile picture
-                    child:
-                        Get.find<ProfileController>()
-                                .profileInfo
-                                .value
-                                ?.user
-                                .profilePicture ==
-                            null
-                        ? Icon(Icons.person, color: Colors.white, size: 20)
-                        : null,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ],
       ),

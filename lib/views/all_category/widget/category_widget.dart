@@ -30,9 +30,13 @@ class CategoryWidget extends GetView<AllCategoryController> {
               InkWell(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
+                // যেখান থেকে পাঠাবে
                 onTap: () => Get.toNamed(
                   Routes.categoryPreviewScreen,
-                  arguments: controller.bookCategoryList[index].id,
+                  arguments: {
+                    'categoryId': controller.bookCategoryList[index].id,
+                    'categoryName': controller.bookCategoryList[index].name, // অথবা যেকোনো data
+                  },
                 ),
                 child: Padding(
                   padding: EdgeInsetsGeometry.symmetric(

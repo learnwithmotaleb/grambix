@@ -43,8 +43,7 @@ class TopBooksScreenMobile extends GetView<TopBooksController> {
                           Dimensions.radius * 0.85,
                         ),
                         child: CachedNetworkImage(
-                          imageUrl:
-                              data.bookCover,
+                          imageUrl: data.bookCover,
                           height: 150.h,
                           width: 140.w,
                           fit: BoxFit.cover,
@@ -86,7 +85,7 @@ class TopBooksScreenMobile extends GetView<TopBooksController> {
                         ),
                       ),
                       child: Text(
-                        '#$index',
+                        '  #${index + 1}  ',
                         style: TextStyle(color: CustomColor.whiteColor),
                       ),
                     ),

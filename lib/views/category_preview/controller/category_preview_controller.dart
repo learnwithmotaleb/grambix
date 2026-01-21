@@ -5,13 +5,20 @@ import '../../../core/api/end_point/api_end_points.dart';
 import '../../../core/api/services/api_request.dart';
 
 class CategoryPreviewController extends GetxController {
+// Controller এ receive করবে
   late final String selectedCategoryId;
+  late final String categoryName;
 
   @override
   void onInit() {
     super.onInit();
-    selectedCategoryId = Get.arguments;
+    final args = Get.arguments as Map<String, dynamic>;
+    selectedCategoryId = args['categoryId'];
+    categoryName = args['categoryName'];
+
     print(selectedCategoryId);
+    print(categoryName);
+
     getALlCategoryBook();
   }
 

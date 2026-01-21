@@ -12,9 +12,9 @@ class ProfileImageWidget extends GetView<ProfileController> {
             children: [
               Obx(() {
                 final profile = controller.profileInfo.value?.user;
-                final hasProfilePicture = profile?.profilePicture != null &&
+                final hasProfilePicture =
+                    profile?.profilePicture != null &&
                     profile!.profilePicture.isNotEmpty;
-
                 return Container(
                   width: 110.w,
                   height: 110.h,
@@ -28,36 +28,36 @@ class ProfileImageWidget extends GetView<ProfileController> {
                   child: ClipOval(
                     child: hasProfilePicture
                         ? CachedNetworkImage(
-                      imageUrl: profile.profilePicture,
-                      fit: BoxFit.cover,
-                      width: 110.w,
-                      height: 110.h,
-                      placeholder: (context, url) => Container(
-                        color: CustomColor.secondary.withOpacity(0.1),
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            color: CustomColor.primary,
-                            strokeWidth: 2,
-                          ),
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => Container(
-                        color: CustomColor.secondary.withOpacity(0.1),
-                        child: Icon(
-                          Icons.person,
-                          size: 55.h,
-                          color: CustomColor.secondary,
-                        ),
-                      ),
-                    )
+                            imageUrl: profile.profilePicture,
+                            fit: BoxFit.cover,
+                            width: 110.w,
+                            height: 110.h,
+                            placeholder: (context, url) => Container(
+                              color: CustomColor.secondary.withOpacity(0.1),
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: CustomColor.primary,
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Container(
+                              color: CustomColor.secondary.withOpacity(0.1),
+                              child: Icon(
+                                Icons.person,
+                                size: 55.h,
+                                color: CustomColor.secondary,
+                              ),
+                            ),
+                          )
                         : Container(
-                      color: CustomColor.secondary.withOpacity(0.1),
-                      child: Icon(
-                        Icons.person,
-                        size: 55.h,
-                        color: CustomColor.secondary,
-                      ),
-                    ),
+                            color: CustomColor.secondary.withOpacity(0.1),
+                            child: Icon(
+                              Icons.person,
+                              size: 55.h,
+                              color: CustomColor.secondary,
+                            ),
+                          ),
                   ),
                 );
               }),
@@ -102,7 +102,7 @@ class ProfileImageWidget extends GetView<ProfileController> {
               padding: EdgeInsets.symmetric(
                 vertical: Dimensions.verticalSize * 0.2,
               ),
-              profile?.firstName ?? 'No Name',
+              '${profile?.firstName} ${profile?.lastName}' ?? 'No Name',
               color: CustomColor.whiteColor,
               fontWeight: FontWeight.bold,
               fontSize: Dimensions.titleMedium * 1.2,

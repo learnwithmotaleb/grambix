@@ -6,7 +6,7 @@ class CategoryPreviewScreenMobile extends GetView<CategoryPreviewController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CommonAppBar(title: Strings.thirrelBook),
+      appBar: CommonAppBar(title:controller.categoryName ?? ''),
       body: Obx(
         () => controller.isLoading.value
             ? LoadingWidget()
