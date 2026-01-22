@@ -12,7 +12,6 @@ import 'initial.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Get.put(NetworkController());
-
   Get.put(RevenueCatService());
   await Initial.init();
   runApp(const MyApp());

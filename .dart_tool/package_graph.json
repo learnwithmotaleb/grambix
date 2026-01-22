@@ -5,7 +5,7 @@
   "packages": [
     {
       "name": "grambix",
-      "version": "1.0.4+5",
+      "version": "1.0.5+6",
       "dependencies": [
         "auto_size_text",
         "cached_network_image",
@@ -55,6 +55,19 @@
       "name": "change_app_package_name",
       "version": "1.5.0",
       "dependencies": []
+    },
+    {
+      "name": "connectivity_plus",
+      "version": "7.0.0",
+      "dependencies": [
+        "collection",
+        "connectivity_plus_platform_interface",
+        "flutter",
+        "flutter_web_plugins",
+        "meta",
+        "nm",
+        "web"
+      ]
     },
     {
       "name": "purchases_flutter",
@@ -245,18 +258,6 @@
       ]
     },
     {
-      "name": "connectivity_plus",
-      "version": "5.0.2",
-      "dependencies": [
-        "connectivity_plus_platform_interface",
-        "flutter",
-        "flutter_web_plugins",
-        "js",
-        "meta",
-        "nm"
-      ]
-    },
-    {
       "name": "cached_network_image",
       "version": "3.4.1",
       "dependencies": [
@@ -360,12 +361,21 @@
       ]
     },
     {
-      "name": "equatable",
-      "version": "2.0.7",
+      "name": "collection",
+      "version": "1.19.1",
+      "dependencies": []
+    },
+    {
+      "name": "nm",
+      "version": "0.5.0",
       "dependencies": [
-        "collection",
-        "meta"
+        "dbus"
       ]
+    },
+    {
+      "name": "meta",
+      "version": "1.17.0",
+      "dependencies": []
     },
     {
       "name": "web",
@@ -373,10 +383,27 @@
       "dependencies": []
     },
     {
+      "name": "connectivity_plus_platform_interface",
+      "version": "2.0.1",
+      "dependencies": [
+        "flutter",
+        "meta",
+        "plugin_platform_interface"
+      ]
+    },
+    {
       "name": "flutter_web_plugins",
       "version": "0.0.0",
       "dependencies": [
         "flutter"
+      ]
+    },
+    {
+      "name": "equatable",
+      "version": "2.0.7",
+      "dependencies": [
+        "collection",
+        "meta"
       ]
     },
     {
@@ -419,16 +446,6 @@
     {
       "name": "path",
       "version": "1.9.1",
-      "dependencies": []
-    },
-    {
-      "name": "meta",
-      "version": "1.17.0",
-      "dependencies": []
-    },
-    {
-      "name": "collection",
-      "version": "1.19.1",
       "dependencies": []
     },
     {
@@ -755,29 +772,6 @@
       "dependencies": []
     },
     {
-      "name": "nm",
-      "version": "0.5.0",
-      "dependencies": [
-        "dbus"
-      ]
-    },
-    {
-      "name": "js",
-      "version": "0.6.7",
-      "dependencies": [
-        "meta"
-      ]
-    },
-    {
-      "name": "connectivity_plus_platform_interface",
-      "version": "1.2.4",
-      "dependencies": [
-        "flutter",
-        "meta",
-        "plugin_platform_interface"
-      ]
-    },
-    {
       "name": "octo_image",
       "version": "2.1.0",
       "dependencies": [
@@ -883,6 +877,16 @@
       ]
     },
     {
+      "name": "dbus",
+      "version": "0.7.11",
+      "dependencies": [
+        "args",
+        "ffi",
+        "meta",
+        "xml"
+      ]
+    },
+    {
       "name": "json_annotation",
       "version": "4.9.0",
       "dependencies": [
@@ -968,16 +972,6 @@
       "name": "term_glyph",
       "version": "1.2.2",
       "dependencies": []
-    },
-    {
-      "name": "dbus",
-      "version": "0.7.11",
-      "dependencies": [
-        "args",
-        "ffi",
-        "meta",
-        "xml"
-      ]
     },
     {
       "name": "sqflite",

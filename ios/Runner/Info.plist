@@ -2,6 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
+
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
@@ -16,24 +17,28 @@
     <string>Grambix</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
+
+    <!-- Version -->
     <key>CFBundleShortVersionString</key>
     <string>$(FLUTTER_BUILD_NAME)</string>
-    <key>CFBundleSignature</key>
-    <string>????</string>
     <key>CFBundleVersion</key>
     <string>$(FLUTTER_BUILD_NUMBER)</string>
+
     <key>LSRequiresIPhoneOS</key>
     <true/>
+
+    <!-- Flutter launch screen -->
     <key>UILaunchStoryboardName</key>
     <string>LaunchScreen</string>
-    <key>UIMainStoryboardFile</key>
-    <string>Main</string>
+
+    <!-- Orientation -->
     <key>UISupportedInterfaceOrientations</key>
     <array>
       <string>UIInterfaceOrientationPortrait</string>
       <string>UIInterfaceOrientationLandscapeLeft</string>
       <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
+
     <key>UISupportedInterfaceOrientations~ipad</key>
     <array>
       <string>UIInterfaceOrientationPortrait</string>
@@ -41,32 +46,38 @@
       <string>UIInterfaceOrientationLandscapeLeft</string>
       <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
+
     <key>CADisableMinimumFrameDurationOnPhone</key>
     <true/>
     <key>UIApplicationSupportsIndirectInputEvents</key>
     <true/>
-    <!-- 🌐 Allow All Internet Loads -->
+
+    <!-- Internet -->
     <key>NSAppTransportSecurity</key>
     <dict>
       <key>NSAllowsArbitraryLoads</key>
       <true/>
     </dict>
-    <!-- 📷 Camera Permission -->
+
+    <!-- Camera -->
     <key>NSCameraUsageDescription</key>
     <string>This app requires access to the camera to capture photos.</string>
-    <!-- 🖼️ Photo Library Permission -->
+
+    <!-- Photo Library -->
     <key>NSPhotoLibraryUsageDescription</key>
     <string>This app requires access to your photo library to select photos.</string>
-    <!-- 🖼️ Save Photos -->
+
     <key>NSPhotoLibraryAddUsageDescription</key>
     <string>This app needs permission to save images to your gallery.</string>
-    <!-- 🔊 Audio Playback Support -->
+
+    <!-- Audio -->
     <key>UIBackgroundModes</key>
     <array>
       <string>audio</string>
     </array>
-    <!-- 💳 In-app Purchases (RevenueCat / purchases_flutter) -->
+
     <key>RCProductEntitlementMapping</key>
     <true/>
+
   </dict>
 </plist>
