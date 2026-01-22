@@ -277,7 +277,7 @@ class ApiRequest {
     };
   }
 
-  /// ✅ Check Internet Connection
+  // /// ✅ Check Internet Connection
   static Future<bool> checkInternetConnection() async {
     final networkController = Get.find<NetworkController>();
     if (!networkController.isConnected.value) {

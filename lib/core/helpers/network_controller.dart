@@ -12,16 +12,20 @@ class NetworkController extends GetxController {
   void onInit() {
     super.onInit();
     _initConnectivityCheck();
-    _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+
+    _connectivity.onConnectivityChanged.listen((List<ConnectivityResult> result) {
+      // Take first result OR check if ANY connectivity is available
+      _updateConnectionStatus(result);
+    });
   }
 
   void _initConnectivityCheck() async {
-    var result = await _connectivity.checkConnectivity();
+    final result = await _connectivity.checkConnectivity();
     _updateConnectionStatus(result);
   }
 
-  void _updateConnectionStatus(ConnectivityResult result) {
-    final newStatus = result != ConnectivityResult.none;
+  void _updateConnectionStatus(List<ConnectivityResult> results) {
+    final newStatus = results.isNotEmpty && results.first != ConnectivityResult.none;
 
     if (isConnected.value != newStatus) {
       isConnected.value = newStatus;
