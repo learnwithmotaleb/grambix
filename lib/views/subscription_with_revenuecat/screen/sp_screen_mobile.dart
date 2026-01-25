@@ -292,7 +292,14 @@ class _SpScreenMobileState extends State<SpScreenMobile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Premium"),
+        backgroundColor: CustomColor.backgroundDark,
+        leading: GestureDetector(
+          onTap: (){
+
+            Get.back();
+          },
+            child: Icon(Icons.arrow_back_ios,color: CustomColor.whiteColor,)) ,
+        title:  Text("Premium",style: TextStyle(color: CustomColor.whiteColor,fontWeight: FontWeight.bold),),
         actions: [
           // Debug button - remove in production
           if (kDebugMode)
@@ -300,7 +307,7 @@ class _SpScreenMobileState extends State<SpScreenMobile> {
             onPressed: () => _rev.restorePurchases(),
             child: Text(
               "Restore",
-              style: TextStyle(color: CustomColor.blackColor),
+                style: TextStyle(color: CustomColor.whiteColor,fontWeight: FontWeight.bold),
             ),
           ),
         ],
