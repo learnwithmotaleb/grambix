@@ -519,7 +519,13 @@
     },
     {
       "name": "purchases_flutter",
-      "rootUri": "file:///Users/abdulmotaleb/.pub-cache/hosted/pub.dev/purchases_flutter-9.10.3",
+      "rootUri": "file:///Users/abdulmotaleb/.pub-cache/hosted/pub.dev/purchases_flutter-9.10.7",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "purchases_ui_flutter",
+      "rootUri": "file:///Users/abdulmotaleb/.pub-cache/hosted/pub.dev/purchases_ui_flutter-9.10.7",
       "packageUri": "lib/",
       "languageVersion": "3.6"
     },
