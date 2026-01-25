@@ -12,7 +12,7 @@
     <key>CFBundleIdentifier</key>
     <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
     <key>CFBundleInfoDictionaryVersion</key>
-    <string>6.0</string>
+    <string>7.0</string>
     <key>CFBundleName</key>
     <string>Grambix</string>
     <key>CFBundlePackageType</key>
@@ -27,9 +27,7 @@
     <key>LSRequiresIPhoneOS</key>
     <true/>
 
-    <!-- Flutter launch screen -->
-    <key>UILaunchStoryboardName</key>
-    <string>LaunchScreen</string>
+
 
     <!-- Orientation -->
     <key>UISupportedInterfaceOrientations</key>

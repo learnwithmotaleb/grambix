@@ -1,155 +1,200 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 class RevenueCatService extends GetxController {
-  // Singleton
   static final RevenueCatService _instance = RevenueCatService._internal();
   factory RevenueCatService() => _instance;
   RevenueCatService._internal();
 
-  // RevenueCat API keys
+  // Your verified Public API Keys
   static const String apiKeyIos = 'appl_ILLaDoanqUTpIrVJxLoVOPjhXkt';
   static const String apiKeyAndroid = 'goog_dBpRdjHQbRYZTMNRwUETawBDqrF';
 
-  // Entitlement & Product IDs
   static const String premiumEntitlement = 'premium';
-  static const String monthlySubscription = 'grambix_premium_monthly';
+  static const String offeringIdentifier = 'premium'; // Offering ID from RevenueCat
 
-  // Reactive states
   final RxBool isPremium = false.obs;
   final RxBool isLoading = false.obs;
   final Rxn<Offerings> offerings = Rxn<Offerings>();
-  CustomerInfo? _latestCustomerInfo;
 
   @override
   Future<void> onInit() async {
     super.onInit();
     await init();
-    _setupListeners();
   }
 
-  /// Initialize RevenueCat
+  /// Initialize SDK and sync status
   Future<void> init() async {
     try {
-      if (kDebugMode) Purchases.setLogLevel(LogLevel.debug);
+      if (kDebugMode) await Purchases.setLogLevel(LogLevel.debug);
 
       final config = PurchasesConfiguration(
         Platform.isIOS ? apiKeyIos : apiKeyAndroid,
       );
 
+      // Set user ID if you have one (optional)
+      // await Purchases.setAppUserID("custom_user_id");
+
       await Purchases.configure(config);
-      await loadOfferings();
-      await checkPremiumStatus();
+
+      // Listen for background updates
+      Purchases.addCustomerInfoUpdateListener((info) {
+        _updatePremiumStatus(info);
+      });
+
+      await refreshStatus();
     } catch (e) {
-      if (kDebugMode) print('RevenueCat init error: $e');
+      debugPrint('RevenueCat configuration error: $e');
     }
   }
 
-  /// Load offerings
-  Future<void> loadOfferings() async {
+  /// Fetch latest offerings and user subscription info
+  Future<void> refreshStatus() async {
     try {
       isLoading.value = true;
-      final loaded = await Purchases.getOfferings();
-      offerings.value = loaded;
+
+      // Fetch available products
+      offerings.value = await Purchases.getOfferings();
+
+      // Check if we have the specific offering
+      if (offerings.value?.current?.identifier != offeringIdentifier) {
+        debugPrint('Warning: Current offering is not "$offeringIdentifier"');
+      }
+
+      // Fetch user entitlement status
+      final info = await Purchases.getCustomerInfo();
+      _updatePremiumStatus(info);
     } catch (e) {
-      if (kDebugMode) print('Error loading offerings: $e');
+      debugPrint('Error refreshing status: $e');
     } finally {
       isLoading.value = false;
     }
   }
 
-  /// Check premium entitlement
-  Future<void> checkPremiumStatus() async {
-    try {
-      final info = await Purchases.getCustomerInfo();
-      _latestCustomerInfo = info;
-      _updatePremiumStatus(info);
-    } catch (e) {
-      if (kDebugMode) print('Error checking premium status: $e');
+  /// Internal logic to check if 'premium' is active
+  void _updatePremiumStatus(CustomerInfo info) {
+    final entitlement = info.entitlements.all[premiumEntitlement];
+    final active = entitlement?.isActive ?? false;
+    isPremium.value = active;
+
+    if (kDebugMode) {
+      debugPrint('Premium status: $active');
+      debugPrint('Entitlement data: ${entitlement?.toString()}');
     }
   }
 
-  /// Listen for entitlement updates
-  void _setupListeners() {
-    Purchases.addCustomerInfoUpdateListener((customerInfo) {
-      _latestCustomerInfo = customerInfo;
-      _updatePremiumStatus(customerInfo);
-    });
+  /// Get localized price for the monthly package
+  String? getProductPrice() {
+    try {
+      // Try current offering first
+      final current = offerings.value?.current;
+      if (current != null) {
+        // Look for monthly package
+        for (final package in current.availablePackages) {
+          if (package.packageType == PackageType.monthly) {
+            return package.storeProduct.priceString;
+          }
+        }
+
+        // If no monthly package found, get first available package
+        if (current.availablePackages.isNotEmpty) {
+          return current.availablePackages.first.storeProduct.priceString;
+        }
+      }
+
+      // Fallback to specific offering if current doesn't work
+      final premiumOffering = offerings.value?.all[offeringIdentifier];
+      if (premiumOffering?.availablePackages?.isNotEmpty == true) {
+        return premiumOffering!.availablePackages!.first.storeProduct.priceString;
+      }
+
+      return null;
+    } catch (e) {
+      debugPrint('Error getting product price: $e');
+      return null;
+    }
   }
 
-  void _updatePremiumStatus(CustomerInfo customerInfo) {
-    final active =
-        customerInfo.entitlements.all[premiumEntitlement]?.isActive ?? false;
-    isPremium.value = active;
-  }
-
-  // -------------------------------
-  // Purchase a package manually
-  // -------------------------------
+  /// Trigger Purchase
   Future<bool> purchaseMonthly() async {
     try {
-      final currentOffering = offerings.value?.current;
-      if (currentOffering == null || currentOffering.availablePackages.isEmpty) {
+      isLoading.value = true;
+
+      // 1. Get the offering
+      final offering = offerings.value?.all[offeringIdentifier] ?? offerings.value?.current;
+
+      if (offering == null) {
+        debugPrint("Error: No offering found");
+        Get.snackbar("Error", "Store configuration issue. Please try again later.");
         return false;
       }
 
-      final pkg = currentOffering.availablePackages.firstWhereOrNull(
-            (p) => p.storeProduct.identifier == monthlySubscription,
-      );
+      // 2. Find monthly package
+      Package? monthlyPackage;
+      for (final package in offering.availablePackages) {
+        if (package.packageType == PackageType.monthly) {
+          monthlyPackage = package;
+          break;
+        }
+      }
 
-      if (pkg == null) return false;
+      // If no monthly found, use first available package
+      monthlyPackage ??= offering.availablePackages.isNotEmpty
+          ? offering.availablePackages.first
+          : null;
 
-      final result = await Purchases.purchasePackage(pkg);
-      final active = result.customerInfo
-          ?.entitlements.all[premiumEntitlement]?.isActive ??
-          false;
+      if (monthlyPackage != null) {
+        // 3. Execute purchase
+        final result = await Purchases.purchasePackage(monthlyPackage);
+        _updatePremiumStatus(result.customerInfo);
 
-      _latestCustomerInfo = result.customerInfo;
-      _updatePremiumStatus(_latestCustomerInfo!);
-
-      return active;
-    } catch (e) {
-      if (kDebugMode) print('Purchase error: $e');
+        if (isPremium.value) {
+          Get.snackbar("Success", "Purchase completed!");
+        }
+        return isPremium.value;
+      } else {
+        debugPrint("Error: No packages found in offering");
+        Get.snackbar("Configuration Error", "No products available for purchase.");
+        return false;
+      }
+    } on PlatformException catch (e) {
+      final errorCode = PurchasesErrorHelper.getErrorCode(e);
+      if (errorCode == PurchasesErrorCode.purchaseCancelledError) {
+        debugPrint("User cancelled the purchase.");
+      } else {
+        debugPrint("Purchase error: ${e.message}");
+        Get.snackbar("Purchase Error", e.message ?? "Something went wrong.");
+      }
       return false;
+    } catch (e) {
+      debugPrint("Unexpected error: $e");
+      Get.snackbar("Error", "An unexpected error occurred.");
+      return false;
+    } finally {
+      isLoading.value = false;
     }
   }
 
-  // -------------------------------
-  // Restore purchases
-  // -------------------------------
-  Future<bool> restorePurchases() async {
+  /// Restore previous purchases
+  Future<void> restorePurchases() async {
     try {
+      isLoading.value = true;
       final info = await Purchases.restorePurchases();
-      _latestCustomerInfo = info;
       _updatePremiumStatus(info);
-      return info.entitlements.all[premiumEntitlement]?.isActive ?? false;
+
+      if (isPremium.value) {
+        Get.snackbar("Success", "Your premium access has been restored.");
+      } else {
+        Get.snackbar("Notice", "No active subscriptions found.");
+      }
     } catch (e) {
-      if (kDebugMode) print('Restore error: $e');
-      return false;
+      debugPrint("Restore error: $e");
+      Get.snackbar("Error", "Failed to restore purchases.");
+    } finally {
+      isLoading.value = false;
     }
-  }
-
-  // -------------------------------
-  // Get product price for UI
-  // -------------------------------
-  String? getProductPrice(String productId) {
-    final pkgs = offerings.value?.current?.availablePackages ?? [];
-    final pkg =
-    pkgs.firstWhereOrNull((p) => p.storeProduct.identifier == productId);
-    return pkg?.storeProduct.priceString;
-  }
-}
-
-// -------------------------------
-// Extension method for firstWhereOrNull
-// -------------------------------
-extension FirstWhereOrNullExtension<E> on Iterable<E> {
-  E? firstWhereOrNull(bool Function(E) test) {
-    for (final e in this) {
-      if (test(e)) return e;
-    }
-    return null;
   }
 }

@@ -54,6 +54,12 @@
 @import purchases_flutter;
 #endif
 
+#if __has_include(<purchases_ui_flutter/PurchasesUiFlutterPlugin.h>)
+#import <purchases_ui_flutter/PurchasesUiFlutterPlugin.h>
+#else
+@import purchases_ui_flutter;
+#endif
+
 #if __has_include(<sqflite_darwin/SqflitePlugin.h>)
 #import <sqflite_darwin/SqflitePlugin.h>
 #else
@@ -77,6 +83,7 @@
   [PathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"PathProviderPlugin"]];
   [PdfxPlugin registerWithRegistrar:[registry registrarForPlugin:@"PdfxPlugin"]];
   [PurchasesFlutterPlugin registerWithRegistrar:[registry registrarForPlugin:@"PurchasesFlutterPlugin"]];
+  [PurchasesUiFlutterPlugin registerWithRegistrar:[registry registrarForPlugin:@"PurchasesUiFlutterPlugin"]];
   [SqflitePlugin registerWithRegistrar:[registry registrarForPlugin:@"SqflitePlugin"]];
   [URLLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"URLLauncherPlugin"]];
 }
