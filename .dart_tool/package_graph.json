@@ -5,12 +5,11 @@
   "packages": [
     {
       "name": "grambix",
-      "version": "1.0.6+7",
+      "version": "1.0.8+9",
       "dependencies": [
         "auto_size_text",
         "cached_network_image",
         "carousel_slider",
-        "connectivity_plus",
         "country_picker",
         "cupertino_icons",
         "dio",
@@ -64,19 +63,6 @@
         "flutter",
         "plugin_platform_interface",
         "purchases_flutter"
-      ]
-    },
-    {
-      "name": "connectivity_plus",
-      "version": "7.0.0",
-      "dependencies": [
-        "collection",
-        "connectivity_plus_platform_interface",
-        "flutter",
-        "flutter_web_plugins",
-        "meta",
-        "nm",
-        "web"
       ]
     },
     {
@@ -378,21 +364,12 @@
       ]
     },
     {
-      "name": "collection",
-      "version": "1.19.1",
-      "dependencies": []
-    },
-    {
-      "name": "nm",
-      "version": "0.5.0",
+      "name": "equatable",
+      "version": "2.0.7",
       "dependencies": [
-        "dbus"
+        "collection",
+        "meta"
       ]
-    },
-    {
-      "name": "meta",
-      "version": "1.17.0",
-      "dependencies": []
     },
     {
       "name": "web",
@@ -400,27 +377,10 @@
       "dependencies": []
     },
     {
-      "name": "connectivity_plus_platform_interface",
-      "version": "2.0.1",
-      "dependencies": [
-        "flutter",
-        "meta",
-        "plugin_platform_interface"
-      ]
-    },
-    {
       "name": "flutter_web_plugins",
       "version": "0.0.0",
       "dependencies": [
         "flutter"
-      ]
-    },
-    {
-      "name": "equatable",
-      "version": "2.0.7",
-      "dependencies": [
-        "collection",
-        "meta"
       ]
     },
     {
@@ -463,6 +423,16 @@
     {
       "name": "path",
       "version": "1.9.1",
+      "dependencies": []
+    },
+    {
+      "name": "meta",
+      "version": "1.17.0",
+      "dependencies": []
+    },
+    {
+      "name": "collection",
+      "version": "1.19.1",
       "dependencies": []
     },
     {
@@ -884,16 +854,6 @@
       "dependencies": [
         "collection",
         "meta"
-      ]
-    },
-    {
-      "name": "dbus",
-      "version": "0.7.11",
-      "dependencies": [
-        "args",
-        "ffi",
-        "meta",
-        "xml"
       ]
     },
     {

@@ -60,13 +60,15 @@ class _SpScreenMobileState extends State<SpScreenMobile> {
               "Unlock instant access to all premium features.",
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 25),
+            const SizedBox(height: 30),
             Row(
               children: [
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () => Navigator.pop(context),
-                    child: const Text("Cancel"),
+                    child:  Text("Cancel",style: TextStyle(
+                      color: CustomColor.background
+                    ),),
                   ),
                 ),
                 const SizedBox(width: 15),
@@ -89,17 +91,19 @@ class _SpScreenMobileState extends State<SpScreenMobile> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: CustomColor.primary,
+                        backgroundColor: CustomColor.background,
                       ),
-                      child: const Text(
+                      child:  Text(
                         "Confirm",
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: CustomColor.primary),
                       ),
                     ),
                   ),
                 ),
               ],
             ),
+            const SizedBox(height: 25),
+
           ],
         ),
       ),
@@ -414,10 +418,10 @@ class _SpScreenMobileState extends State<SpScreenMobile> {
 
   Widget _buildPriceCard(String? price) {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: CustomColor.primary.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: CustomColor.primary.withOpacity(0.2)),
       ),
       child: Row(
@@ -430,20 +434,21 @@ class _SpScreenMobileState extends State<SpScreenMobile> {
                 "Monthly Plan",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: 16,
                   color: CustomColor.primary,
                 ),
               ),
               Text(
                 "Billed monthly. Cancel anytime.",
-                style: TextStyle(color: CustomColor.primary.withOpacity(0.8)),
+                style: TextStyle(color: CustomColor.primary.withOpacity(0.8),
+                fontSize: 12),
               ),
             ],
           ),
           Text(
             price ?? 'Loading...',
             style: TextStyle(
-              fontSize: 22,
+              fontSize: 16,
               fontWeight: FontWeight.bold,
               color: CustomColor.primary,
             ),
@@ -525,7 +530,7 @@ class _SpScreenMobileState extends State<SpScreenMobile> {
               ? null
               : () => _showConfirmBottomSheet(context),
           style: ElevatedButton.styleFrom(
-            backgroundColor: CustomColor.primary,
+            backgroundColor: CustomColor.backgroundDark,
             minimumSize: const Size(double.infinity, 55),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
@@ -533,15 +538,16 @@ class _SpScreenMobileState extends State<SpScreenMobile> {
             elevation: 3,
           ),
           child: _rev.isLoading.value
-              ? CircularProgressIndicator(color: Colors.white)
+              ? CircularProgressIndicator(color: CustomColor.primary)
               : Text(
             _rev.isPremium.value
                 ? "PRO UNLOCKED ✓"
                 : hasProducts
                 ? "CONTINUE TO PAY - ${_rev.getProductPrice()}/month"
                 : "CONFIGURE STORE FIRST",
-            style: const TextStyle(
-              color: Colors.white,
+            style:  TextStyle(
+              color: CustomColor.primary,
+              fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
           ),
