@@ -4,7 +4,6 @@ import 'package:grambix/core/utils/space.dart';
 import 'package:grambix/views/subscription_with_revenuecat/screen/sp_screen_mobile.dart';
 import 'package:grambix/widgets/primary_button_widget.dart';
 import 'package:grambix/widgets/text_widget.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
 
 import '../../../core/utils/basic_import.dart';
 import '../../../widgets/auth_app_bar.dart';

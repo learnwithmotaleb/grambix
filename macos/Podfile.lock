@@ -1,0 +1,85 @@
+PODS:
+  - audio_session (0.0.1):
+    - FlutterMacOS
+  - file_selector_macos (0.0.1):
+    - FlutterMacOS
+  - FlutterMacOS (1.0.0)
+  - in_app_purchase_storekit (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - just_audio (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - pdfx (1.0.0):
+    - FlutterMacOS
+  - purchases_flutter (9.10.7):
+    - FlutterMacOS
+    - PurchasesHybridCommon (= 17.28.1)
+  - PurchasesHybridCommon (17.28.1):
+    - RevenueCat (= 5.55.2)
+  - RevenueCat (5.55.2)
+  - sqflite_darwin (0.0.4):
+    - Flutter
+    - FlutterMacOS
+  - url_launcher_macos (0.0.1):
+    - FlutterMacOS
+
+DEPENDENCIES:
+  - audio_session (from `Flutter/ephemeral/.symlinks/plugins/audio_session/macos`)
+  - file_selector_macos (from `Flutter/ephemeral/.symlinks/plugins/file_selector_macos/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral`)
+  - in_app_purchase_storekit (from `Flutter/ephemeral/.symlinks/plugins/in_app_purchase_storekit/darwin`)
+  - just_audio (from `Flutter/ephemeral/.symlinks/plugins/just_audio/darwin`)
+  - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
+  - pdfx (from `Flutter/ephemeral/.symlinks/plugins/pdfx/macos`)
+  - purchases_flutter (from `Flutter/ephemeral/.symlinks/plugins/purchases_flutter/macos`)
+  - sqflite_darwin (from `Flutter/ephemeral/.symlinks/plugins/sqflite_darwin/darwin`)
+  - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
+
+SPEC REPOS:
+  trunk:
+    - PurchasesHybridCommon
+    - RevenueCat
+
+EXTERNAL SOURCES:
+  audio_session:
+    :path: Flutter/ephemeral/.symlinks/plugins/audio_session/macos
+  file_selector_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/file_selector_macos/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+  in_app_purchase_storekit:
+    :path: Flutter/ephemeral/.symlinks/plugins/in_app_purchase_storekit/darwin
+  just_audio:
+    :path: Flutter/ephemeral/.symlinks/plugins/just_audio/darwin
+  path_provider_foundation:
+    :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
+  pdfx:
+    :path: Flutter/ephemeral/.symlinks/plugins/pdfx/macos
+  purchases_flutter:
+    :path: Flutter/ephemeral/.symlinks/plugins/purchases_flutter/macos
+  sqflite_darwin:
+    :path: Flutter/ephemeral/.symlinks/plugins/sqflite_darwin/darwin
+  url_launcher_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
+
+SPEC CHECKSUMS:
+  audio_session: eaca2512cf2b39212d724f35d11f46180ad3a33e
+  file_selector_macos: 9e9e068e90ebee155097d00e89ae91edb2374db7
+  FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
+  in_app_purchase_storekit: 22cca7d08eebca9babdf4d07d0baccb73325d3c8
+  just_audio: 4e391f57b79cad2b0674030a00453ca5ce817eed
+  path_provider_foundation: bb55f6dbba17d0dccd6737fe6f7f34fbd0376880
+  pdfx: 1e79f57f7a6ce2f4a4c30f21fa54d3dc82441b51
+  purchases_flutter: 7b46667e599187b4c9e542e86ba915d80911c783
+  PurchasesHybridCommon: 57e9e2fd474a726c41f61d5359f1bc05d89d9be8
+  RevenueCat: b5605778017c179315e60b8921ed158b3428688c
+  sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
+  url_launcher_macos: f87a979182d112f911de6820aefddaf56ee9fbfd
+
+PODFILE CHECKSUM: 54d867c82ac51cbd61b565781b9fada492027009
+
+COCOAPODS: 1.16.2
