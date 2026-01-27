@@ -69,7 +69,7 @@ class FreeTrialScreenMobile extends GetView<FreeTrialController> {
                       top: Dimensions.verticalSize,
                     ),
 
-                    'Only \$8/month after trial. Cancel anytime.',
+                    'Only \$12.99/month after trial. Cancel anytime.',
                     fontSize: Dimensions.titleSmall,
 
                     color: CustomColor.whiteColor,

@@ -3,7 +3,7 @@ description: "A new Flutter project."
 
 publish_to: 'none'
 
-version: 1.0.6+7
+version: 1.0.7+8
 
 environment:
   sdk: ^3.8.1
@@ -41,7 +41,7 @@ dependencies:
   dio:
   in_app_purchase: ^3.2.3
   purchases_flutter: ^9.9.7
-  connectivity_plus: ^7.0.0
+#  connectivity_plus: ^7.0.0
   purchases_ui_flutter: ^9.10.7
 
 

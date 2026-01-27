@@ -1,23 +1,28 @@
 import 'package:grambix/routes/routes.dart';
 import 'package:grambix/views/splash/controller/splash_controller.dart';
 import 'package:grambix/views/subscription_with_revenuecat/controller/revenue_cat_services.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'core/helpers/network_controller.dart';
 import 'core/utils/basic_import.dart';
 import 'initial.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
-void main()  {
-  // 1. Ensure Flutter bindings are ready
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // 2. Perform general app initialization (Firebase, etc.)
-   Initial.init();
-
-  // 3. Initialize RevenueCat BEFORE the app runs
-  // This ensures that subscription status is ready immediately
-  Get.put(RevenueCatService(), permanent: true);
-  Get.put(NetworkController(), permanent: true);
+  await Initial.init();
+  // Configure RevenueCat
+  try {
+    await RevenueCatService().init();
+  } catch (e) {
+    debugPrint("RevenueCat init failed: $e");
+  }
   runApp(const MyApp());
+
 }
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -29,7 +34,6 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           initialRoute: Routes.splashScreen,
