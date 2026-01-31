@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grambix/core/utils/extensions.dart';
 import 'package:grambix/routes/routes.dart';
@@ -26,32 +27,64 @@ class AppHaderWidget extends StatelessWidget {
             onTap: () => Get.find<NavigationController>().goToProfile(),
             child: Padding(
               padding: Dimensions.defaultHorizontalSize.edgeHorizontal,
-              child: CircleAvatar(
-                backgroundColor: Colors.grey.shade300,
-                radius: 17,
-                backgroundImage:
-                Get.find<ProfileController>()
+              child: Obx(() {
+                final profilePicture = Get.find<ProfileController>()
                     .profileInfo
                     .value
                     ?.user
-                    .profilePicture !=
-                    null
-                    ? NetworkImage(
-                  Get.find<ProfileController>().profileInfo.value!.user.profilePicture,
-                )
-                    : null, // Fallback if there is no profile picture
-                child:
-                Get.find<ProfileController>()
-                    .profileInfo
-                    .value
-                    ?.user
-                    .profilePicture ==
-                    null
-                    ? Icon(Icons.person, color: Colors.white, size: 20)
-                    : null,
-              ),
+                    .profilePicture;
+                final hasImage = profilePicture != null && profilePicture.isNotEmpty;
+
+                return Container(
+                  width: 48.w,
+                  height: 48.h,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: CustomColor.primary.withOpacity(0.3),
+                      width: 1.5,
+                    ),
+                  ),
+                  child: ClipOval(
+                    child: hasImage
+                        ? CachedNetworkImage(
+                      imageUrl: profilePicture,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        color: CustomColor.secondary.withOpacity(0.1),
+                        child: Center(
+                          child: SizedBox(
+                            width: 16.w,
+                            height: 16.h,
+                            child: CircularProgressIndicator(
+                              color: CustomColor.primary,
+                              strokeWidth: 2,
+                            ),
+                          ),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: CustomColor.secondary.withOpacity(0.1),
+                        child: Icon(
+                          Icons.person,
+                          size: 24.h,
+                          color: CustomColor.secondary,
+                        ),
+                      ),
+                    )
+                        : Container(
+                      color: CustomColor.secondary.withOpacity(0.1),
+                      child: Icon(
+                        Icons.person,
+                        size: 24.h,
+                        color: CustomColor.secondary,
+                      ),
+                    ),
+                  ),
+                );
+              }),
             ),
-          ),
+          )
         ],
       ),
     );
