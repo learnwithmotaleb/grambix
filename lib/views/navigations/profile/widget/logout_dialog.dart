@@ -65,8 +65,10 @@ class LogoutDialog extends StatelessWidget {
               title: Strings.logOut,
               buttonTextColor: CustomColor.whiteColor,
               fontWeight: FontWeight.w600,
-              onPressed: () {
+              onPressed: () async{
                 AppStorage.clear();
+                await Purchases.logOut();
+                await SharedPreferenceHelper.clear();
                 Get.offAllNamed(Routes.loginScreen);
               },
               // isLoading: Get.put(LoginController()).isLoading.value,

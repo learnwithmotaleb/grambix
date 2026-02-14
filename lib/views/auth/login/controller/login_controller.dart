@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:grambix/core/api/services/auth_services.dart';
+import 'package:grambix/core/utils/sharepreference_helper.dart';
 import 'package:grambix/views/auth/login/model/login_model.dart';
 
 import '../../../../core/helpers/helpers.dart';
@@ -21,8 +22,8 @@ class LoginController extends GetxController {
   @override
   onInit() {
     super.onInit();
-    // emailController.text = 'rakibgm@yopmail.com';
-    // passwordController.text = '123456';
+    emailController.text = 'jmmotaleb100@gmail.com';
+    passwordController.text = '123456789';
   }
 
   RxBool isLoading = false.obs;
@@ -33,5 +34,7 @@ class LoginController extends GetxController {
       email: emailController.text,
       password: passwordController.text,
     );
+
+
   }
 }

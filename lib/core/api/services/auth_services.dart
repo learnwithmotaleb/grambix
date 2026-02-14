@@ -3,8 +3,11 @@ import 'package:grambix/core/api/end_point/api_end_points.dart';
 import 'package:grambix/core/api/model/basic_success_model.dart';
 import 'package:grambix/core/api/services/api_request.dart';
 import 'package:grambix/core/utils/app_storage.dart';
+import 'package:grambix/core/utils/sharepreference_helper.dart';
 import 'package:grambix/views/auth/login/model/login_model.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import '../../../routes/routes.dart';
+import '../../../views/subscription_with_revenuecat/controller/revenue_cat_services.dart';
 
 class AuthServices {
   /// =============================================== ✅ Login  ================================================== ///
@@ -14,19 +17,41 @@ class AuthServices {
     required String email,
     required String password,
   }) async {
-    Map<String, dynamic> inputBody = {'email': email, 'password': password};
+    Map<String, dynamic> inputBody = {
+      'email': email,
+      'password': password,
+    };
+
     return await ApiRequest.post(
       fromJson: LoginModel.fromJson,
       endPoint: ApiEndPoints.login,
       isLoading: isLoading,
       body: inputBody,
-      onSuccess: (result) {
+      onSuccess: (result) async {
+        // 1️⃣ Save token
         AppStorage.save(
           token: result.token,
           temporaryToken: result.refreshToken,
           isLoggedIn: true,
         );
-        Get.offAllNamed(Routes.navigation);
+
+        // 2️⃣ Save userId
+        final userId = result.user.id.toString();
+        await SharedPreferenceHelper.saveUserId(userId);
+
+        // 3️⃣ RevenueCat login
+        await Purchases.logIn(userId);
+
+        // 4️⃣ Check subscription
+        final rev = Get.find<RevenueCatService>();
+        await rev.refreshStatus();
+
+        // 5️⃣ Navigate based on subscription
+        if (rev.isPremium.value) {
+          Get.offAllNamed(Routes.navigation); // Home
+        } else {
+          Get.offAllNamed(Routes.freeTrialScreen); // Paywall
+        }
       },
     );
   }

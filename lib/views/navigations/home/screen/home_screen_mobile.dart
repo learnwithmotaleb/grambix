@@ -5,6 +5,7 @@ class HomeScreenMobile extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: _buildAppBar(),
       body: Obx(() => _buildBody()),

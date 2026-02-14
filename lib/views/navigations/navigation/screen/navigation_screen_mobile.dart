@@ -5,6 +5,12 @@ class NavigationScreenMobile extends GetView<NavigationController> {
 
   @override
   Widget build(BuildContext context) {
+
+    print("================User id===================");
+    print(SharedPreferenceHelper.userId.toString());
+    print("================User id===================");
+
+
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) async {

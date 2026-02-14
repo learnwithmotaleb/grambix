@@ -10,12 +10,12 @@ class RevenueCatService extends GetxController {
   factory RevenueCatService() => _instance;
   RevenueCatService._internal();
 
-  // Your verified Public API Keys
+  // Public API Keys
   static const String apiKeyIos = 'appl_ILLaDoanqUTpIrVJxLoVOPjhXkt';
   static const String apiKeyAndroid = 'goog_dBpRdjHQbRYZTMNRwUETawBDqrF';
 
   static const String premiumEntitlement = 'premium';
-  static const String offeringIdentifier = 'premium'; // Offering ID from RevenueCat
+  static const String offeringIdentifier = 'premium';
 
   final RxBool isPremium = false.obs;
   final RxBool isLoading = false.obs;
@@ -27,7 +27,7 @@ class RevenueCatService extends GetxController {
     await init();
   }
 
-  /// Initialize SDK and sync status
+  /// Initialize RevenueCat SDK
   Future<void> init() async {
     try {
       if (kDebugMode) await Purchases.setLogLevel(LogLevel.debug);
@@ -36,38 +36,35 @@ class RevenueCatService extends GetxController {
         Platform.isIOS ? apiKeyIos : apiKeyAndroid,
       );
 
-      // Set user ID if you have one (optional)
-      // await Purchases.setAppUserID("custom_user_id");
-
       await Purchases.configure(config);
 
-      // Listen for background updates
+      // Listen for subscription updates
       Purchases.addCustomerInfoUpdateListener((info) {
-        _updatePremiumStatus(info);
+        _handleCustomerInfoUpdate(info);
       });
 
       await refreshStatus();
     } catch (e) {
-      debugPrint('RevenueCat configuration error: $e');
+      debugPrint('RevenueCat init error: $e');
     }
   }
 
-  /// Fetch latest offerings and user subscription info
+  /// Refresh offerings and subscription info
   Future<void> refreshStatus() async {
     try {
       isLoading.value = true;
 
-      // Fetch available products
+      // Get offerings
       offerings.value = await Purchases.getOfferings();
 
-      // Check if we have the specific offering
+      // Warn if offering not found
       if (offerings.value?.current?.identifier != offeringIdentifier) {
         debugPrint('Warning: Current offering is not "$offeringIdentifier"');
       }
 
-      // Fetch user entitlement status
+      // Get user info
       final info = await Purchases.getCustomerInfo();
-      _updatePremiumStatus(info);
+      _handleCustomerInfoUpdate(info);
     } catch (e) {
       debugPrint('Error refreshing status: $e');
     } finally {
@@ -75,38 +72,33 @@ class RevenueCatService extends GetxController {
     }
   }
 
-  /// Internal logic to check if 'premium' is active
-  void _updatePremiumStatus(CustomerInfo info) {
+  /// Handle subscription updates including cancellation
+  void _handleCustomerInfoUpdate(CustomerInfo info) {
     final entitlement = info.entitlements.all[premiumEntitlement];
     final active = entitlement?.isActive ?? false;
+
+    // Update reactive status
     isPremium.value = active;
 
     if (kDebugMode) {
-      debugPrint('Premium status: $active');
-      debugPrint('Entitlement data: ${entitlement?.toString()}');
+      debugPrint('Premium status updated: $active');
+      debugPrint('Entitlement details: ${entitlement?.toString()}');
     }
   }
 
-  /// Get localized price for the monthly package
+  /// Get localized price of monthly package
   String? getProductPrice() {
     try {
-      // Try current offering first
       final current = offerings.value?.current;
       if (current != null) {
-        // Look for monthly package
-        for (final package in current.availablePackages) {
-          if (package.packageType == PackageType.monthly) {
-            return package.storeProduct.priceString;
-          }
-        }
-
-        // If no monthly package found, get first available package
-        if (current.availablePackages.isNotEmpty) {
-          return current.availablePackages.first.storeProduct.priceString;
-        }
+        final monthlyPackage = current.availablePackages
+            .firstWhere(
+              (p) => p.packageType == PackageType.monthly,
+          orElse: () => current.availablePackages.first,
+        );
+        return monthlyPackage.storeProduct.priceString;
       }
 
-      // Fallback to specific offering if current doesn't work
       final premiumOffering = offerings.value?.all[offeringIdentifier];
       if (premiumOffering?.availablePackages?.isNotEmpty == true) {
         return premiumOffering!.availablePackages!.first.storeProduct.priceString;
@@ -119,60 +111,43 @@ class RevenueCatService extends GetxController {
     }
   }
 
-  /// Trigger Purchase
+  /// Purchase monthly subscription
   Future<bool> purchaseMonthly() async {
     try {
       isLoading.value = true;
 
-      // 1. Get the offering
       final offering = offerings.value?.all[offeringIdentifier] ?? offerings.value?.current;
-
-      if (offering == null) {
-        debugPrint("Error: No offering found");
-        Get.snackbar("Error", "Store configuration issue. Please try again later.");
+      if (offering == null || offering.availablePackages.isEmpty) {
+        Get.snackbar("Error", "No products available to purchase.");
         return false;
       }
 
-      // 2. Find monthly package
-      Package? monthlyPackage;
-      for (final package in offering.availablePackages) {
-        if (package.packageType == PackageType.monthly) {
-          monthlyPackage = package;
-          break;
-        }
+      // Monthly package
+      final monthlyPackage = offering.availablePackages.firstWhere(
+            (p) => p.packageType == PackageType.monthly,
+        orElse: () => offering.availablePackages.first,
+      );
+
+      final result = await Purchases.purchasePackage(monthlyPackage);
+
+      _handleCustomerInfoUpdate(result.customerInfo);
+
+      if (isPremium.value) {
+        Get.snackbar("Success", "Purchase completed!");
       }
-
-      // If no monthly found, use first available package
-      monthlyPackage ??= offering.availablePackages.isNotEmpty
-          ? offering.availablePackages.first
-          : null;
-
-      if (monthlyPackage != null) {
-        // 3. Execute purchase
-        final result = await Purchases.purchasePackage(monthlyPackage);
-        _updatePremiumStatus(result.customerInfo);
-
-        if (isPremium.value) {
-          Get.snackbar("Success", "Purchase completed!");
-        }
-        return isPremium.value;
-      } else {
-        debugPrint("Error: No packages found in offering");
-        Get.snackbar("Configuration Error", "No products available for purchase.");
-        return false;
-      }
+      return isPremium.value;
     } on PlatformException catch (e) {
-      final errorCode = PurchasesErrorHelper.getErrorCode(e);
-      if (errorCode == PurchasesErrorCode.purchaseCancelledError) {
-        debugPrint("User cancelled the purchase.");
+      final code = PurchasesErrorHelper.getErrorCode(e);
+      if (code == PurchasesErrorCode.purchaseCancelledError) {
+        debugPrint("Purchase cancelled by user.");
       } else {
         debugPrint("Purchase error: ${e.message}");
         Get.snackbar("Purchase Error", e.message ?? "Something went wrong.");
       }
       return false;
     } catch (e) {
-      debugPrint("Unexpected error: $e");
-      Get.snackbar("Error", "An unexpected error occurred.");
+      debugPrint("Unexpected purchase error: $e");
+      Get.snackbar("Error", "Unexpected error occurred.");
       return false;
     } finally {
       isLoading.value = false;
@@ -184,12 +159,12 @@ class RevenueCatService extends GetxController {
     try {
       isLoading.value = true;
       final info = await Purchases.restorePurchases();
-      _updatePremiumStatus(info);
+      _handleCustomerInfoUpdate(info);
 
       if (isPremium.value) {
-        Get.snackbar("Success", "Your premium access has been restored.");
+        Get.snackbar("Success", "Premium restored!");
       } else {
-        Get.snackbar("Notice", "No active subscriptions found.");
+        Get.snackbar("Notice", "No active subscription found.");
       }
     } catch (e) {
       debugPrint("Restore error: $e");
