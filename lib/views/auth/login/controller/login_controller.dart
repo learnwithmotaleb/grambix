@@ -22,8 +22,8 @@ class LoginController extends GetxController {
   @override
   onInit() {
     super.onInit();
-    emailController.text = 'jmmotaleb100@gmail.com';
-    passwordController.text = '123456789';
+    // emailController.text = 'jmmotaleb100@gmail.com';
+    // passwordController.text = '123456789';
   }
 
   RxBool isLoading = false.obs;
