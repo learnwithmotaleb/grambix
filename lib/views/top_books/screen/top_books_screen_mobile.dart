@@ -32,6 +32,8 @@ class TopBooksScreenMobile extends GetView<TopBooksController> {
                   mainAxisAlignment: mainSpaceBet,
                   children: [
                     Container(
+                      height: 175.h,
+                      width: 130.w,
                       decoration: BoxDecoration(
                         border: Border.all(color: CustomColor.secondary),
                         borderRadius: BorderRadius.circular(

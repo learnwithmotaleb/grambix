@@ -13,7 +13,7 @@ class LibrrayCard extends GetView<LibraryController> {
       cacheExtent: 500,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 0.69,
+        childAspectRatio: 0.51,
         crossAxisSpacing: Dimensions.widthSize,
       ),
       itemCount: controller.downloadedItems.length,
@@ -49,6 +49,8 @@ class LibrrayCard extends GetView<LibraryController> {
               child: Stack(
                 children: [
                   Container(
+                    height: 170.h,
+                    width: 130.w,
                     decoration: BoxDecoration(
                       border: Border.all(color: CustomColor.secondary),
                       borderRadius: BorderRadius.circular(
@@ -96,153 +98,156 @@ class LibrrayCard extends GetView<LibraryController> {
               ),
             ),
             Space.height.v5,
-            Row(
-              children: [
-                Expanded(
-                  child: TextWidget(
-                    // padding: EdgeInsets.symmetric(horizontal: 8.w),
-                    item["title"] ?? "No Title",
-                    fontWeight: FontWeight.bold,
-                    color: CustomColor.whiteColor,
-                    fontSize: Dimensions.titleSmall * 0.9,
-                    maxLines: 1,
-                    textOverflow: TextOverflow.ellipsis,
+            SizedBox(
+              width: 130.w, // ← Image এর সমান width
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextWidget(
+                      item["title"] ?? "No Title",
+                      fontWeight: FontWeight.bold,
+                      color: CustomColor.whiteColor,
+                      fontSize: Dimensions.titleSmall * 0.9,
+                      maxLines: 1,
+                      textOverflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-                InkWell(
-                  onTap: () async {
-                    final confirmed = await Get.dialog<bool>(
-                      Dialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            Dimensions.radius,
+                  InkWell(
+                    onTap: () async {
+                      final confirmed = await Get.dialog<bool>(
+                        Dialog(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              Dimensions.radius,
+                            ),
                           ),
-                        ),
-                        elevation: 5,
-                        backgroundColor: CustomColor.background,
-                        child: Padding(
-                          padding: EdgeInsets.all(
-                            Dimensions.defaultHorizontalSize,
-                          ),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.delete_forever,
-                                color: Colors.redAccent,
-                                size: 50,
-                              ),
-                              SizedBox(height: Dimensions.verticalSize * 0.5),
-                              Text(
-                                "Delete Item?",
-                                style: TextStyle(
-                                  fontSize: Dimensions.titleLarge,
-                                  fontWeight: FontWeight.bold,
-                                  color: CustomColor.whiteColor,
+                          elevation: 5,
+                          backgroundColor: CustomColor.background,
+                          child: Padding(
+                            padding: EdgeInsets.all(
+                              Dimensions.defaultHorizontalSize,
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.delete_forever,
+                                  color: Colors.redAccent,
+                                  size: 50,
                                 ),
-                              ),
-                              SizedBox(height: Dimensions.verticalSize * 0.3),
-                              Text(
-                                "Are you sure you want to delete this item from your library?",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: Dimensions.titleSmall * 0.9,
-                                  color: CustomColor.secondary,
+                                SizedBox(height: Dimensions.verticalSize * 0.5),
+                                Text(
+                                  "Delete Item?",
+                                  style: TextStyle(
+                                    fontSize: Dimensions.titleLarge,
+                                    fontWeight: FontWeight.bold,
+                                    color: CustomColor.whiteColor,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: Dimensions.verticalSize * 0.5),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Expanded(
-                                    child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.redAccent,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            Dimensions.radius * 0.5,
+                                SizedBox(height: Dimensions.verticalSize * 0.3),
+                                Text(
+                                  "Are you sure you want to delete this item from your library?",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: Dimensions.titleSmall * 0.9,
+                                    color: CustomColor.secondary,
+                                  ),
+                                ),
+                                SizedBox(height: Dimensions.verticalSize * 0.5),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Expanded(
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.redAccent,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              Dimensions.radius * 0.5,
+                                            ),
+                                          ),
+                                        ),
+                                        onPressed: () => Get.back(result: true),
+                                        child: Text(
+                                          "Delete",
+                                          style: TextStyle(
+                                            color: CustomColor.whiteColor,
+                                            fontSize: Dimensions.titleSmall,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ),
-                                      onPressed: () => Get.back(result: true),
-                                      child: Text(
-                                        "Delete",
-                                        style: TextStyle(
-                                          color: CustomColor.whiteColor,
-                                          fontSize: Dimensions.titleSmall,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
                                     ),
-                                  ),
-                                  SizedBox(width: Dimensions.widthSize),
-                                  Expanded(
-                                    child: OutlinedButton(
-                                      style: OutlinedButton.styleFrom(
-                                        side: BorderSide(
-                                          color: CustomColor.primary,
-                                          width: 1.5,
+                                    SizedBox(width: Dimensions.widthSize),
+                                    Expanded(
+                                      child: OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                          side: BorderSide(
+                                            color: CustomColor.primary,
+                                            width: 1.5,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              Dimensions.radius * 0.5,
+                                            ),
+                                          ),
                                         ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            Dimensions.radius * 0.5,
+                                        onPressed: () => Get.back(result: false),
+                                        child: Text(
+                                          "Cancel",
+                                          style: TextStyle(
+                                            fontSize: Dimensions.titleSmall,
+                                            color: CustomColor.primary,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ),
-                                      onPressed: () => Get.back(result: false),
-                                      child: Text(
-                                        "Cancel",
-                                        style: TextStyle(
-                                          fontSize: Dimensions.titleSmall,
-                                          color: CustomColor.primary,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      barrierDismissible: true,
-                    );
+                        barrierDismissible: true,
+                      );
 
-                    if (confirmed == true) {
-                      Get.find<LibraryController>().deleteDownload(item);
-                    }
-                  },
-                  child: SvgPicture.asset(
-                    Assets.icons.delete,
-                    height: Dimensions.iconSizeDefault * 0.9,
+                      if (confirmed == true) {
+                        Get.find<LibraryController>().deleteDownload(item);
+                      }
+                    },
+                    child: SvgPicture.asset(
+                      Assets.icons.delete,
+                      height: Dimensions.iconSizeDefault * 0.9,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Space.height.v5,
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: TextWidget(
-                    textOverflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    item["synopsis"] ?? "",
-                    fontSize: Dimensions.titleSmall * 0.85,
-                    color: CustomColor.secondary,
+            SizedBox(
+              width: 130.w, // ← Subtitle Row এও same width
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: TextWidget(
+                      textOverflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      item["synopsis"] ?? "",
+                      fontSize: Dimensions.titleSmall * 0.85,
+                      color: CustomColor.secondary,
+                    ),
                   ),
-                ),
-                item['pdf'] != null && item['audio'] != null
-                    ? SvgPicture.asset(Assets.icons.music)
-                    : item['pdf'] != null
-                    ? SvgPicture.asset(Assets.icons.glass) // only pdf
-                    : item['audio'] != null
-                    ? SvgPicture.asset(Assets.icons.headphone) // only audio
-                    : SvgPicture.asset(Assets.icons.headphone),
-              ],
+                  item['pdf'] != null && item['audio'] != null
+                      ? SvgPicture.asset(Assets.icons.music)
+                      : item['pdf'] != null
+                      ? SvgPicture.asset(Assets.icons.glass)
+                      : item['audio'] != null
+                      ? SvgPicture.asset(Assets.icons.headphone)
+                      : SvgPicture.asset(Assets.icons.headphone),
+                ],
+              ),
             ),
           ],
         );

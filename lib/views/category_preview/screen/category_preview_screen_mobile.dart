@@ -78,47 +78,70 @@ class CategoryPreviewScreenMobile extends GetView<CategoryPreviewController> {
                 physics: ClampingScrollPhysics(),
                 cacheExtent: 500,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
+                  crossAxisCount: 3,
                   crossAxisSpacing: Dimensions.widthSize * 1.25,
                   mainAxisSpacing: Dimensions.heightSize,
-                  childAspectRatio: 0.69,
+                  childAspectRatio: 0.51,
                 ),
                 itemCount: controller.categoryBookList.length,
                 itemBuilder: (context, index) {
                   final data = controller.categoryBookList[index];
                   return RepaintBoundary(
                     child: GestureDetector(
-                      onTap: () => Get.toNamed(Routes.detailPreviewScreen,arguments: data.id),
+                      onTap: () => Get.toNamed(
+                        Routes.detailPreviewScreen,
+                        arguments: data.id,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
+                            height: 170.h,
+                            width: 130.w,
                             decoration: BoxDecoration(
                               border: Border.all(color: CustomColor.secondary),
                               borderRadius: BorderRadius.circular(
                                 Dimensions.radius * 0.85,
                               ),
                             ),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  data.bookCover,
-                              height: 150.h,
-                              width: 160.w,
-                              fit: BoxFit.cover,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                Dimensions.radius * 0.85,
+                              ),
+                              child: CachedNetworkImage(
+                                imageUrl: data.bookCover,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade800,
+                                  highlightColor: Colors.grey.shade700,
+                                  child: Container(
+                                    color: Colors.grey.shade800,
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => Container(
+                                  color: CustomColor.secondary.withOpacity(0.1),
+                                  child: Icon(
+                                    Icons.image_not_supported,
+                                    color: CustomColor.secondary,
+                                    size: 40.h,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                           Space.height.v5,
                           TextWidget(
-                            padding:
-                                Dimensions.horizontalSize.edgeHorizontal * 0.1,
+                            padding: Dimensions.horizontalSize.edgeHorizontal * 0.1,
                             data.bookName,
                             fontWeight: FontWeight.bold,
                             color: CustomColor.whiteColor,
+                            maxLines: 1,
+                            textOverflow: TextOverflow.ellipsis,
                             fontSize: Dimensions.titleSmall,
                           ),
                           Padding(
-                            padding:
-                                Dimensions.horizontalSize.edgeHorizontal * 0.1,
+                            padding: Dimensions.horizontalSize.edgeHorizontal * 0.1,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

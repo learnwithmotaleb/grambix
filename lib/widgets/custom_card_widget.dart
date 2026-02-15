@@ -36,7 +36,7 @@ class CustomItemsCardWidget<R> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 220.h,
+      height: 222.h,
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
@@ -67,7 +67,7 @@ class CustomItemsCardWidget<R> extends StatelessWidget {
                 children: [
                   // Image Container
                   Container(
-                    height: 170.h,
+                    height: 175.h,
                     width: 130.w,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(

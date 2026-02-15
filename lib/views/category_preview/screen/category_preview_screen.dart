@@ -9,6 +9,7 @@ import 'package:grambix/widgets/auth_app_bar.dart';
 import 'package:grambix/widgets/custom_card_widget.dart';
 import 'package:grambix/widgets/empty_data_widget.dart';
 import 'package:grambix/widgets/loading_widget.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../core/api/end_point/api_end_points.dart';
 import '../../../core/languages/strings.dart';
 import '../../../core/themes/token.dart';
