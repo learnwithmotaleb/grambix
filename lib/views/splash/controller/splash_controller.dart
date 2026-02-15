@@ -5,22 +5,32 @@ import '../../../routes/routes.dart';
 import '../../subscription_with_revenuecat/controller/revenue_cat_services.dart';
 
 class SplashController extends GetxController {
+  final RevenueCatService _rev = Get.find<RevenueCatService>();
+
   @override
-  Future<void> onReady()  async {
+  Future<void> onReady() async {
     super.onReady();
+    await _startAppFlow();
+  }
 
-    // // ScreenUtil mandatory
-    // await ScreenUtil.ensureScreenSize();
+  Future<void> _startAppFlow() async {
+    // Optional splash delay
+    await Future.delayed(const Duration(seconds: 2));
 
-    // final rev = Get.put(RevenueCatService(), permanent: true);
-    // await rev.init();
+    // 1️⃣ Check login first
+    if (!AppStorage.isLoggedIn) {
+      Get.offAllNamed(Routes.loginScreen);
+      return;
+    }
 
-    Future.delayed(Duration(seconds: 5), () {
-      if (AppStorage.isLoggedIn) {
-        Get.toNamed(Routes.navigation);
-      } else {
-        Get.toNamed(Routes.loginScreen);
-      }
-    });
+    // 2️⃣ If logged in → refresh subscription
+    await _rev.refreshStatus();
+
+    // 3️⃣ Navigate based on subscription
+    if (_rev.isPremium.value) {
+      Get.offAllNamed(Routes.navigation); // Home
+    } else {
+      Get.offAllNamed(Routes.freeTrialScreen); // Paywall
+    }
   }
 }
